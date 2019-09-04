@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 
 namespace Collective.Models
 {
-    public class Memory
+    public class UserFriend
     {
         public int Id { get; set; }
-        public int RecordId { get; set; }
-        public Record Record { get; set; }
         public int ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public string MemoryBody { get; set; }
+        public int FriendId { get; set; }
+        public ApplicationUser ApplicationUserFriend { get; set; }
+        public bool Pending { get; set; }
         public DateTime DateAdded { get; set; }
+
     }
 }

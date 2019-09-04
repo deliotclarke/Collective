@@ -12,7 +12,7 @@ namespace Collective.Models
         public string Title { get; set; }
         public string RecordCompany { get; set; }
         public string Condition { get; set; }
-        public string TrackListing { get; set; }
+        public string TrackList { get; set; }
         public string Barcode { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace Collective.Models
     {
         public int Id { get; set; }
         public int ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
         public int RecordId { get; set; }
         public Record Record { get; set; }
         public DateTime DateAdded { get; set; }
