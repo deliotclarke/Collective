@@ -80,7 +80,7 @@ namespace Collective.Areas.Identity.Pages.Account
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == Input.UserChoice || u.Email == Input.UserChoice);
                 if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
