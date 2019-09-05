@@ -15,7 +15,7 @@ namespace Collective.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly string _recordURL = "https://api.discogs.com/masters/27819";
+        private readonly string _recordURL = @"https://api.discogs.com/database/search?q=Johnny&format=Vinyl&type=all&key=vLjKQVWwqcRKcmZqrPba&secret=EASZywMOXSWvazmAuYdgvJWfEttkQJDh";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
 
@@ -44,6 +44,8 @@ namespace Collective.Controllers
             var secret = _config["Discogs:Secret"];
             var url = $"{_recordURL}";
             var client = new HttpClient();
+
+            client.DefaultRequestHeaders.Add("user-agent", "Something");
 
             var response = await client.GetAsync(url);
 
