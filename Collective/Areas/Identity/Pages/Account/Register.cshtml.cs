@@ -41,19 +41,19 @@ namespace Collective.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
+            [MaxLength(15)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
-            [EmailAddress]
+            [MaxLength(15)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [Required]
-            [EmailAddress]
+            [MaxLength(15)]
             [Display(Name = "Username")]
-            public string Username { get; set; }
+            public string UserName { get; set; }
 
             [Required]
             [EmailAddress]

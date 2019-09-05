@@ -17,9 +17,6 @@ namespace Collective.Models
         [MaxLength(15)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [Required]
-        [MaxLength(15)]
-        public string Username { get; set; }
         [MaxLength(200)]
         [Display(Name = "About Me")]
         public string Bio { get; set; }
