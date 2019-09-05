@@ -4,16 +4,14 @@ using Collective.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Collective.Data.Migrations
+namespace Collective.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190905144941_UpdatedUser")]
-    partial class UpdatedUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,10 +69,6 @@ namespace Collective.Data.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(15);
 
                     b.HasKey("Id");
 

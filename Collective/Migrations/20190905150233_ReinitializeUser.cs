@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Collective.Data.Migrations
+namespace Collective.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class ReinitializeUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +40,11 @@ namespace Collective.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(maxLength: 15, nullable: false),
+                    LastName = table.Column<string>(maxLength: 15, nullable: false),
+                    Bio = table.Column<string>(maxLength: 200, nullable: true),
+                    UserImg = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
