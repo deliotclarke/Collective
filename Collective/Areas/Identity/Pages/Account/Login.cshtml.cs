@@ -75,8 +75,9 @@ namespace Collective.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                //Below the code is requesting a user from the database based on whether UserChoice matches either email or username of all users
+                //This allows the user to use either identifier to login and we also keep identity happy if the user isn't null - using that same
+                //user we pulled from the database
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == Input.UserChoice || u.Email == Input.UserChoice);
                 if (user != null)
                 {
