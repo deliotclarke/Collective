@@ -7,5 +7,6 @@ namespace Collective.Models
 {
     public class DiscogsMasterSearch
     {
+
     }
 }

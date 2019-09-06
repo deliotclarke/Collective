@@ -16,10 +16,12 @@ namespace Collective.Models
         public string Year { get; set; }
         public List<Label> Label { get; set; }
         public List<Style> Style { get; set; }
+        public List<Community> Community { get; set; }
         public string Condition { get; set; }
+        public string LowestPrice { get; set; }
         public string TrackList { get; set; }
         public List<Barcode> Barcode { get; set; }
-        public string Master_Url { get; }
+        public string Master_Url { get; set; }
     }
 
     public class Barcode
@@ -35,5 +37,11 @@ namespace Collective.Models
     public class Style
     {
         public string StyleName { get; set; }
+    }
+
+    public class Community
+    {
+        public int want { get; set; }
+        public int have { get; set; }
     }
 }
