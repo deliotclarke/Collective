@@ -12,9 +12,18 @@ namespace Collective.Models
             public int Per_page { get; set; }
             public int Pages { get; set; }
             public int Page { get; set; }
-            //public List<Urls> Urls { get; set; }
+            public Urls Urls { get; set; }
             public int Items { get; set; }
         }
+
+        public class Urls
+        {
+            public string Next { get; set; }
+            public string Prev { get; set; }
+            public string Last { get; set; }
+            public string First { get; set; }
+        }
+
 
         public class DiscogsPageResponse
         {
