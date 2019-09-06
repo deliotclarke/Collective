@@ -14,13 +14,13 @@ namespace Collective.Models
         public string Artist { get; set; }
         public string Title { get; set; }
         public string Year { get; set; }
-        public List<Label> Label { get; set; }
-        public List<Style> Style { get; set; }
-        public List<Community> Community { get; set; }
+        public List<string> Label { get; set; }
+        public List<string> Style { get; set; }
+        public Community Community { get; set; }
         public string Condition { get; set; }
         public string LowestPrice { get; set; }
         public string TrackList { get; set; }
-        public List<Barcode> Barcode { get; set; }
+        public List<string> Barcode { get; set; }
         public string Master_Url { get; set; }
     }
 

@@ -10,6 +10,7 @@ using Collective.Models;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using Newtonsoft.Json;
+using static Collective.Models.DiscogsSearch;
 
 // This controller will be used for getting records from discogs, not from records inside the Collective database
 namespace Collective.Controllers
@@ -29,7 +30,50 @@ namespace Collective.Controllers
         // GET: Search
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Record.ToListAsync());
+            var discogsResponse = await GetRequestFromDiscogs();
+
+            if (discogsResponse != null)
+            {
+                return View();
+            }
+            return View();
+        }
+
+        private async Task<DiscogsPageResponse> GetRequestFromDiscogs()
+        {
+            var key = _config["Discogs:Key"];
+            var secret = _config["Discogs:Secret"];
+            var url = $"{_recordURL}";
+            var client = new HttpClient();
+
+            client.DefaultRequestHeaders.Add("user-agent", "Collective");
+
+            var response = await client.GetAsync(url);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+
+
+                var responseContent = await response.Content.ReadAsAsync<DiscogsPageResponse>();
+
+                if (responseContent != null)
+                {
+                    return responseContent;
+                }
+
+                //var record = await _context.Record
+                //.FirstOrDefaultAsync(m => m.Id == searchString);
+                //if (record == null)
+                //{
+                //    return NotFound();
+                //}
+
+                
+            }
+
+            return null;
+
         }
 
         // GET: Search/Details/5
@@ -55,19 +99,7 @@ namespace Collective.Controllers
             {
                 
 
-                var recordString = await response.Content.ReadAsStringAsync();
-                var JsonObj = JsonConvert.DeserializeObject(recordString);
-                
-                if (JsonObj != null)
-                {
-                    return null;
-                };
-                //foreach (var record in JsonObj)
-                //{
-                //    var recordObj = new Record()
-                //    {
-                //    };
-                //}
+                var responseContent = await response.Content.ReadAsAsync<DiscogsSearch>();
 
                 //var record = await _context.Record
                 //.FirstOrDefaultAsync(m => m.Id == searchString);

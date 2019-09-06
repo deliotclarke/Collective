@@ -12,20 +12,14 @@ namespace Collective.Models
             public int Per_page { get; set; }
             public int Pages { get; set; }
             public int Page { get; set; }
-            public List<Urls> Urls { get; set; }
+            //public List<Urls> Urls { get; set; }
             public int Items { get; set; }
         }
 
-        public class Urls
+        public class DiscogsPageResponse
         {
-            public string Last { get; set; }
-            public string Next { get; set; }
-        }
-
-        public class Results
-        {
-            public List<Record> Records { get; set; }
-
+            public Pagination Pagination { get; set; }
+            public IEnumerable<Record> Results { get; set; }
         }
 
     }
