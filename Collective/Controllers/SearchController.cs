@@ -9,6 +9,7 @@ using Collective.Data;
 using Collective.Models;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 // This controller will be used for getting records from discogs, not from records inside the Collective database
 namespace Collective.Controllers
@@ -45,12 +46,29 @@ namespace Collective.Controllers
             var url = $"{_recordURL}";
             var client = new HttpClient();
 
-            client.DefaultRequestHeaders.Add("user-agent", "Something");
+            client.DefaultRequestHeaders.Add("user-agent", "Collective");
 
             var response = await client.GetAsync(url);
 
+
             if (response.IsSuccessStatusCode)
             {
+                
+
+                var recordString = await response.Content.ReadAsStringAsync();
+                var JsonObj = JsonConvert.DeserializeObject(recordString);
+                
+                if (JsonObj != null)
+                {
+                    return null;
+                };
+                //foreach (var record in JsonObj)
+                //{
+                //    var recordObj = new Record()
+                //    {
+                //    };
+                //}
+
                 //var record = await _context.Record
                 //.FirstOrDefaultAsync(m => m.Id == searchString);
                 //if (record == null)

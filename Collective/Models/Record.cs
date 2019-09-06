@@ -8,11 +8,32 @@ namespace Collective.Models
     public class Record
     {
         public int Id { get; set; }
+        public string catno { get; set; }
+        public string Thumb { get; set; }
+        public string Cover_Image { get; set; }
         public string Artist { get; set; }
         public string Title { get; set; }
-        public string RecordCompany { get; set; }
+        public string Year { get; set; }
+        public List<Label> Label { get; set; }
+        public List<Style> Style { get; set; }
         public string Condition { get; set; }
         public string TrackList { get; set; }
-        public string Barcode { get; set; }
+        public List<Barcode> Barcode { get; set; }
+        public string Master_Url { get; }
+    }
+
+    public class Barcode
+    {
+        public string SingleBarcode { get; set; }
+    }
+
+    public class Label
+    {
+        public string LabelName { get; set; }
+    }
+
+    public class Style
+    {
+        public string StyleName { get; set; }
     }
 }
