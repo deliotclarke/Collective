@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,8 +9,7 @@ namespace Collective.Models
     public class DiscogsMasterSearch
     {
         public int Id { get; set; }
-        public List<string> Styles { get; set; }
-        public List<string> Genres { get; set; }
+        public List<Style> Styles { get; set; }
         public int Num_For_Sale { get; set; }
         public string Title { get; set; }
         public string Main_Release_Url { get; set; }

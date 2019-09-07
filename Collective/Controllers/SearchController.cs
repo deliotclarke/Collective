@@ -83,7 +83,14 @@ namespace Collective.Controllers
 
             var newMasterUrl = masterUrl.Replace("%2F", "/");
 
-            var url = $"{newMasterUrl}";
+            var discogsResponse = await GetMasterSearchFromDiscogs(newMasterUrl);
+
+            return View(discogsResponse);
+        }
+
+        private async Task<DiscogsMasterSearch> GetMasterSearchFromDiscogs(string masterUrl)
+        {
+            var url = $"{masterUrl}";
             var client = new HttpClient();
 
             client.DefaultRequestHeaders.Add("user-agent", "Collective");
@@ -92,12 +99,10 @@ namespace Collective.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
 
-                Console.WriteLine(responseContent);
+                return responseContent;
             }
-
-
 
             return null;
         }
