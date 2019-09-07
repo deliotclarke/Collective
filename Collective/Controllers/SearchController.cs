@@ -28,23 +28,28 @@ namespace Collective.Controllers
         }
 
         // GET: Search
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var discogsResponse = await GetRequestFromDiscogs();
+            if (String.IsNullOrEmpty(searchString))
+            {
+                return View();
+            }
+
+            var discogsResponse = await GetRequestFromDiscogs(searchString);
 
             if (discogsResponse != null)
             {
                 var recordList = discogsResponse.Results;
-
                 return View(recordList);
             }
             return View();
         }
 
-        private async Task<DiscogsPageResponse> GetRequestFromDiscogs()
+        private async Task<DiscogsPageResponse> GetRequestFromDiscogs(string searchString)
         {
             var key = _config["Discogs:Key"];
             var secret = _config["Discogs:Secret"];
+            var query = searchString;
             var url = $"{_recordURL}";
             var client = new HttpClient();
 
