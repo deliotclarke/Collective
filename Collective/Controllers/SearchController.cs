@@ -17,7 +17,8 @@ namespace Collective.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly string _recordURL = @"https://api.discogs.com/database/search?q=Johnny&format=Vinyl&type=all&key=vLjKQVWwqcRKcmZqrPba&secret=EASZywMOXSWvazmAuYdgvJWfEttkQJDh";
+        private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
+        private readonly string _keepItVinyl = @"&format=Vinyl&type=all&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
 
@@ -50,9 +51,11 @@ namespace Collective.Controllers
             var key = _config["Discogs:Key"];
             var secret = _config["Discogs:Secret"];
             var query = searchString;
-            var url = $"{_recordURL}";
+            var vinyl = _keepItVinyl;
+            var url = $"{_recordURL}{query}{_keepItVinyl}key={key}&secret={secret}";
             var client = new HttpClient();
 
+            // required user-agent header - otherwise response is 403(forbidden)
             client.DefaultRequestHeaders.Add("user-agent", "Collective");
 
             var response = await client.GetAsync(url);
