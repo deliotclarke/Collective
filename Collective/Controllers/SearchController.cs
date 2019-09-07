@@ -34,7 +34,9 @@ namespace Collective.Controllers
 
             if (discogsResponse != null)
             {
-                return View();
+                var recordList = discogsResponse.Results;
+
+                return View(recordList);
             }
             return View();
         }
@@ -50,11 +52,8 @@ namespace Collective.Controllers
 
             var response = await client.GetAsync(url);
 
-
             if (response.IsSuccessStatusCode)
             {
-
-
                 var responseContent = await response.Content.ReadAsAsync<DiscogsPageResponse>();
 
                 if (responseContent != null)
@@ -62,57 +61,18 @@ namespace Collective.Controllers
                     return responseContent;
                 }
 
-                //var record = await _context.Record
-                //.FirstOrDefaultAsync(m => m.Id == searchString);
-                //if (record == null)
-                //{
-                //    return NotFound();
-                //}
-
-                
             }
-
             return null;
-
         }
 
         // GET: Search/Details/5
         public async Task<IActionResult> Details()
         {
-
             //if (searchString == null)
             //{
             //    return NotFound();
             //}
-
-            var key = _config["Discogs:Key"];
-            var secret = _config["Discogs:Secret"];
-            var url = $"{_recordURL}";
-            var client = new HttpClient();
-
-            client.DefaultRequestHeaders.Add("user-agent", "Collective");
-
-            var response = await client.GetAsync(url);
-
-
-            if (response.IsSuccessStatusCode)
-            {
-                
-
-                var responseContent = await response.Content.ReadAsAsync<DiscogsSearch>();
-
-                //var record = await _context.Record
-                //.FirstOrDefaultAsync(m => m.Id == searchString);
-                //if (record == null)
-                //{
-                //    return NotFound();
-                //}
-
-                return View();
-            }
-
-            return NotFound();
-            
+            return View();
         }
 
         // GET: Search/Create
