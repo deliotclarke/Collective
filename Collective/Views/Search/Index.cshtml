@@ -1,34 +1,25 @@
 ﻿@model IEnumerable<Collective.Models.Record>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Search";
 }
 
-<h1>Index</h1>
+<h1>Quick Find</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Artist)
+                @Html.DisplayNameFor(model => model.Catno)
+            </th>
+            <th>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.RecordCompany)*@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Condition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TrackList)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Barcode)
+                @Html.DisplayNameFor(model => model.Year)
             </th>
             <th></th>
         </tr>
@@ -37,27 +28,27 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Artist)
+                @Html.DisplayFor(modelItem => item.Catno)
+            </td>
+            <td>
+                @if  (item.Thumb != null)
+                {
+                    <img src="@Url.Content(item.Thumb)" alt="Album Thumb"/>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @*@Html.DisplayFor(modelItem => item.RecordCompany)*@
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td style="text-align:center">
+                <a asp-action="Details" asp-route-id="@item.Master_Url">View Album</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Condition)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TrackList)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Barcode)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
 }
