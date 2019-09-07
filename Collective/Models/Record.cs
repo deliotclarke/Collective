@@ -34,6 +34,7 @@ namespace Collective.Models
         public List<string> Barcode { get; set; }
         public string Master_Url { get; set; }
         public bool Owned { get; set; }
+        public bool TopFive { get; set; }
     }
 
     public class Barcode
