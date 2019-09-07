@@ -5,6 +5,12 @@
 }
 
 <h1>Quick Find</h1>
+<div>
+    <form style="float:right" class="form-inline mb-5" asp-controller="Search" asp-action="Index">
+        <input style="width:500px;" class="form-control mr-4" type="search" name="SearchString" placeholder="search title, artist, category number, etc...">
+        <button class="btn btn-outline-dark" type="submit">Search</button>
+    </form>
+</div>
 
 
 <table class="table">
