@@ -33,6 +33,7 @@ namespace Collective.Models
         [Display(Name = "Barcode(s)")]
         public List<string> Barcode { get; set; }
         public string Master_Url { get; set; }
+        public bool Owned { get; set; }
     }
 
     public class Barcode
