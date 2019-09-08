@@ -1,6 +1,5 @@
 # Collective
 
-Mentor: Kristen Norris
 
 ## Problem
 ##### My proposed app is a social media app for users who collect vinyl. An intuitive and aesthetically pleasing place for users to catalog their collection easily, make friends based on suggestions that use which records are in a user’s top 5, and possibly see their collections worth, view records for sale on their wishlist and list records for sale on Discogs. Collective will also provide an easy way to check if a record you’re thinking of purchasing is already in your collection.
@@ -30,19 +29,21 @@ MVP
 
 Features:
 
-User Authentication
-Record Collection List - Create, Read, Update, DESTROY
-User Profiles w/ Optional Image Upload
-Friend List
-Easy Search to See If a Record Is Already In Your Collection/What Condition - “Record Check”
+- User Authentication
+- Record Collection List - Create, Read, Update, DESTROY
+- User Profiles w/ Optional Image Upload
+- Friend List
+- Easy Search to See If a Record Is Already In Your Collection/What Condition - “Record Check”
 
 Stretch Goals:
 
-Check For Records In Your Collection By Barcode
-Friend Suggestions Based on Top 5 Records
-Synced with Discogs Profile
-Listing and Selling Records Through Discogs
-Last Three Sales of Records On eBay
-Spotify “Collective Playlist” - Add Songs From Records You Own
-Memories - A Sort of User Diary for Specific Records
-Mobile Version
+- Check For Records In Your Collection By Barcode
+- Friend Suggestions Based on Top 5 Records
+- Synced with Discogs Profile
+- Listing and Selling Records Through Discogs
+- Last Three Sales of Records On eBay
+- Spotify “Collective Playlist” - Add Songs From Records You Own
+- Memories - A Sort of User Diary for Specific Records
+- Mobile Version
+
+Mentor: Kristen Norris
