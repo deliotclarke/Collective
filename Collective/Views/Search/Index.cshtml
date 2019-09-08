@@ -50,7 +50,7 @@
                         @Html.DisplayFor(modelItem => item.Year)
                     </td>
                     <td style="text-align:center">
-                        <a asp-action="Details" asp-route-id="@item.Master_Url">View Album</a>
+                        <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)">View Album</a>
                     </td>
                     <td>
                         @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

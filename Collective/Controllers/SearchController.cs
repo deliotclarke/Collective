@@ -52,7 +52,7 @@ namespace Collective.Controllers
             var secret = _config["Discogs:Secret"];
             var query = searchString;
             var vinyl = _keepItVinyl;
-            var url = $"{_recordURL}{query}{_keepItVinyl}key={key}&secret={secret}";
+            var url = $"{_recordURL}{query}{vinyl}key={key}&secret={secret}";
             var client = new HttpClient();
 
             // required user-agent header - otherwise response is 403(forbidden)
@@ -68,19 +68,43 @@ namespace Collective.Controllers
                 {
                     return responseContent;
                 }
-
             }
             return null;
         }
 
         // GET: Search/Details/5
-        public async Task<IActionResult> Details()
+        [Route("Search/Details/{masterUrl}")]
+        public async Task<IActionResult> Details(string masterUrl)
         {
-            //if (searchString == null)
-            //{
-            //    return NotFound();
-            //}
-            return View();
+            if (masterUrl == null)
+            {
+                return NotFound();
+            }
+
+            var newMasterUrl = masterUrl.Replace("%2F", "/");
+
+            var discogsResponse = await GetMasterSearchFromDiscogs(newMasterUrl);
+
+            return View(discogsResponse);
+        }
+
+        private async Task<DiscogsMasterSearch> GetMasterSearchFromDiscogs(string masterUrl)
+        {
+            var url = $"{masterUrl}";
+            var client = new HttpClient();
+
+            client.DefaultRequestHeaders.Add("user-agent", "Collective");
+
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
+
+                return responseContent;
+            }
+
+            return null;
         }
 
         // GET: Search/Create
