@@ -18,6 +18,7 @@ namespace Collective.Models
         public int Year { get; set; }
         public string Resource_Url { get; set; }
         public List<Track> Tracklist { get; set; }
+        public string Notes { get; set; }
     }
 
     public class Artist

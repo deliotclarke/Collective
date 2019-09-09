@@ -10,12 +10,22 @@
     <h4>DiscogsMasterSearch</h4>
     <hr />
     <div class="row">
-        @if (Model.ImageUrl != null)
-        {
-            <img class="col-sm mb-4" src="@Url.Content(Model.ImageUrl)" alt="Album Thumb" />
-        }
-        <br />
-        <dl class="col-sm">
+        <div class="col-sm-5">
+            @if (Model.ImageUrl != null)
+            {
+
+                <img class="col-sm-10 mb-5 small" src="@Url.Content(Model.ImageUrl)" alt="Album Thumb" />
+                <h4 class="col-sm-8">Tracklist:</h4>
+                <ol>
+                    @foreach (var track in Model.Tracklist)
+                    {
+                        <li>@Html.DisplayFor(Tracklist => track.Title) - @Html.DisplayFor(Tracklist => track.Duration)</li>
+                    }
+                </ol>
+
+            }
+        </div>
+        <dl class="col">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Year)
             </dt>
@@ -49,16 +59,19 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Main_Release_Url)
             </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Resource_Url)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Resource_Url)
-            </dd>
+            @if (Model.Notes != null)
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Notes)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Notes)
+                </dd>
+            }
         </dl>
-        // add buttons for adding to different lists/removing
+        @*add buttons for adding to different lists/removing*@
     </div>
 </div>
-<div>
-    <a class="col-sm" asp-action="Index">Back to Search</a>
+<div class="mt-5">
+    <a class="col-sm" asp-controller="Search" asp-action="Index">Back to Search</a>
 </div>
