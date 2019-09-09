@@ -73,8 +73,8 @@ namespace Collective.Controllers
         }
 
         // GET: Search/Details/5
-        [Route("Search/Details/{masterUrl}")]
-        public async Task<IActionResult> Details(string masterUrl)
+        [Route("Search/Details/{masterUrl}/{imageUrl}")]
+        public async Task<IActionResult> Details(string masterUrl, string imageUrl)
         {
             if (masterUrl == null)
             {
@@ -82,8 +82,11 @@ namespace Collective.Controllers
             }
 
             var newMasterUrl = masterUrl.Replace("%2F", "/");
+            var newImageUrl = imageUrl.Replace("%2F", "/");
 
             var discogsResponse = await GetMasterSearchFromDiscogs(newMasterUrl);
+
+            discogsResponse.ImageUrl = newImageUrl;
 
             return View(discogsResponse);
         }
