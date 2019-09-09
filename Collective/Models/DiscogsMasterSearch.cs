@@ -9,6 +9,7 @@ namespace Collective.Models
     public class DiscogsMasterSearch
     {
         public int Id { get; set; }
+        public string ImageUrl { get; set; }
         public List<string> Styles { get; set; }
         public int Num_For_Sale { get; set; }
         public string Title { get; set; }
@@ -17,6 +18,7 @@ namespace Collective.Models
         public int Year { get; set; }
         public string Resource_Url { get; set; }
         public List<Track> Tracklist { get; set; }
+        public string Notes { get; set; }
     }
 
     public class Artist
