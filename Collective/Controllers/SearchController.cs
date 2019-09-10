@@ -118,28 +118,6 @@ namespace Collective.Controllers
             return null;
         }
 
-        // GET: Search/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Search/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(record);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(record);
-        }
-
         // GET: Search/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
