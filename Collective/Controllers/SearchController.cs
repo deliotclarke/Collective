@@ -21,6 +21,7 @@ namespace Collective.Controllers
     public class SearchController : Controller
     {
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
+        private readonly string _masterURL = @"https://api.discogs.com/masters/";
         private readonly string _keepItVinyl = @"&format=Vinyl&per_page=10&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
@@ -119,7 +120,7 @@ namespace Collective.Controllers
         }
 
         // GET: Search/Add
-        public async Task<IActionResult> Add(string id)
+        public async Task<IActionResult> Add(int? id, string imageUrl)
         {
             if (id == null)
             {
@@ -130,9 +131,10 @@ namespace Collective.Controllers
             var secret = _config["Discogs:Secret"];
             var query = id;
             var vinyl = _keepItVinyl;
-            var url = $"{_recordURL}{query}{vinyl}key={key}&secret={secret}";
+            var url = $"{_masterURL}{query}";
             var client = new HttpClient();
-            
+
+            var newImageUrl = imageUrl.Replace("%2F", "/");
 
             client.DefaultRequestHeaders.Add("user-agent", "Collective");
 
@@ -140,17 +142,17 @@ namespace Collective.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsAsync<DiscogsPageResponse>();
-                var getUserRecord = responseContent.Results.Where(rec => rec.Catno == id).FirstOrDefault();
+                var responseContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
+                responseContent.ImageUrl = newImageUrl;
 
                 var currentUser = await GetCurrentUserAsync();
 
                 var collectionCheck = _context.Collection
-                    .Where(col => col.ApplicationUserId == currentUser.Id && col.Record.Catno == id);
+                    .Where(col => col.ApplicationUserId == currentUser.Id && col.Record.Master_Id == id);
 
-                if (!collectionCheck.Any(col => col.Record.Catno == getUserRecord.Catno))
+                if (collectionCheck != null)
                 {
-                    return View(getUserRecord);
+                    return View(responseContent);
                 }
 
                 //this needs to be an error that says the user already has it in their collection
@@ -199,7 +201,7 @@ namespace Collective.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
         {
-            if (id != record.Id)
+            if (id != record.Master_Id)
             {
                 return NotFound();
             }
@@ -213,7 +215,7 @@ namespace Collective.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecordExists(record.Id))
+                    if (!RecordExists(record.Master_Id))
                     {
                         return NotFound();
                     }
@@ -231,7 +233,7 @@ namespace Collective.Controllers
 
         private bool RecordExists(int id)
         {
-            return _context.Record.Any(e => e.Id == id);
+            return _context.Record.Any(e => e.Master_Id == id);
         }
     }
 }

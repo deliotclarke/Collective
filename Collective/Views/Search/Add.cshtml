@@ -1,60 +1,54 @@
-﻿@model Collective.Models.Record
+﻿@model Collective.Models.DiscogsMasterSearch
 
 @{
     ViewData["Title"] = "Add";
 }
 
-<h1>Add</h1>
-
+<div class="ml-3">
+    <a asp-action="Index">Back to Search</a>
+</div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Add">
-            <div>
-                <h5>Add @Model.Title by @Model.Artist to your Collection?</h5>
-            </div>
+            <img class="col-md-3 mb-4 mt-4" src="@Model.ImageUrl" alt="Album Thumb" />
+            <h5 class="col-md-12 mb-4">Are you sure you want to add @Model.Title by @Model.Artists.First().Name to your Collection?</h5>
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="hidden" asp-for="Catno" class="form-control" />
+                <input type="hidden" asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
-            <div type="hidden" class="form-group">
-                <input type="hidden" asp-for="Thumb" class="form-control" />
+            <div class="form-group">
+                <input type="hidden" asp-for="Num_For_Sale" class="form-control" />
+                <span asp-validation-for="Num_For_Sale" class="text-danger"></span>
             </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="Cover_Image" class="form-control" />
-            </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="Artist" class="form-control" />
-            </div>
-            <div type="hiddden" class="form-group">
+            <div class="form-group">
                 <input type="hidden" asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="Year" class="form-control" />
-            </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="Condition" class="form-control" />
-            </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="Lowest_Price" class="form-control" />
-            </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="TrackList" class="form-control" />
-            </div>
-            <div type="hiddden" class="form-group">
-                <input type="hidden" asp-for="Master_Url" class="form-control" />
-            </div>
-            <input type="hidden" class="form-check-input" asp-for="Owned" />
-            <input type="hidden" class="form-check-input" asp-for="TopFive" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="hidden" asp-for="Main_Release_Url" class="form-control" />
+                <span asp-validation-for="Main_Release_Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Resource_Url" class="form-control" />
+                <span asp-validation-for="Resource_Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <input type="submit" value="Add To Collection" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to Search</a>
 </div>
 
 @section Scripts {
