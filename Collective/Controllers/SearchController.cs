@@ -21,7 +21,7 @@ namespace Collective.Controllers
     public class SearchController : Controller
     {
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
-        private readonly string _keepItVinyl = @"&format=Vinyl&type=all&";
+        private readonly string _keepItVinyl = @"&format=Vinyl&per_page=10&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly SignInManager<ApplicationUser> _signInManger;
@@ -141,22 +141,20 @@ namespace Collective.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsAsync<DiscogsPageResponse>();
-                var getUserRecord = responseContent.Results.Where(rec => rec.Catno == id);
+                var getUserRecord = responseContent.Results.Where(rec => rec.Catno == id).FirstOrDefault();
 
                 var currentUser = await GetCurrentUserAsync();
 
                 var collectionCheck = _context.Collection
-                    .Where(col => col.ApplicationUserId == currentUser.Id)
-                    .Include(col => col.Record.Catno == id);
+                    .Where(col => col.ApplicationUserId == currentUser.Id && col.Record.Catno == id);
 
-                if (collectionCheck == null)
+                if (!collectionCheck.Any(col => col.Record.Catno == getUserRecord.Catno))
                 {
                     return View(getUserRecord);
                 }
 
                 //this needs to be an error that says the user already has it in their collection
                 return NotFound();
-                
             }
 
             return NotFound();
