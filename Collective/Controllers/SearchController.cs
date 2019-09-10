@@ -118,6 +118,66 @@ namespace Collective.Controllers
             return null;
         }
 
+        // GET: Search/Add
+        public async Task<IActionResult> Add(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var key = _config["Discogs:Key"];
+            var secret = _config["Discogs:Secret"];
+            var query = id;
+            var vinyl = _keepItVinyl;
+            var url = $"{_recordURL}{query}{vinyl}key={key}&secret={secret}";
+            var client = new HttpClient();
+            
+
+            client.DefaultRequestHeaders.Add("user-agent", "Collective");
+
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsAsync<DiscogsPageResponse>();
+                var getUserRecord = responseContent.Results.Where(rec => rec.Catno == id);
+
+                var currentUser = await GetCurrentUserAsync();
+
+                var collectionCheck = _context.Collection
+                    .Where(col => col.ApplicationUserId == currentUser.Id)
+                    .Include(col => col.Record.Catno == id);
+
+                if (collectionCheck == null)
+                {
+                    return View(getUserRecord);
+                }
+
+                //this needs to be an error that says the user already has it in their collection
+                return NotFound();
+                
+            }
+
+            return NotFound();
+        }
+
+        // POST: Search/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add([Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(record);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(record);
+        }
+
         // GET: Search/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -168,6 +228,8 @@ namespace Collective.Controllers
             }
             return View(record);
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         private bool RecordExists(int id)
         {

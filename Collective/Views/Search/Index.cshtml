@@ -41,9 +41,9 @@
                     </td>
                     <td>
                         @if (item.Thumb != null)
-            {
+                        {
                             <img src="@Url.Content(item.Thumb)" alt="Album Thumb" />
-            }
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)
@@ -55,12 +55,12 @@
                         <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
                     </td>
                     <td>
-                        @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Add" asp-route-id="@item.Catno" asp-route-title="@item.Title">Add</a>
+                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                     </td>
                 </tr>
             }
         </tbody>
     }
-    </table>
+</table>
