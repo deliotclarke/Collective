@@ -12,8 +12,12 @@ namespace Collective.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<Collective.Models.Record> Record { get; set; }
-        public DbSet<Collective.Models.DiscogsMasterSearch> DiscogsMasterSearch { get; set; }
+        public DbSet<Record> Record { get; set; }
+        public DbSet<Collection> Collection { get; set; }
+        public DbSet<Memory> Memory { get; set; }
+        public DbSet<UserFriend> UserFriend { get; set; }
+        public DbSet<DiscogsMasterSearch> DiscogsMasterSearch { get; set; }
+        
     }
 }
 

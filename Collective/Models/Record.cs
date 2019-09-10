@@ -9,7 +9,9 @@ namespace Collective.Models
 {
     public class Record
     {
-        public int Id { get; set; }
+        [Key]
+        [Display(Name = "Id")]
+        public int Master_Id { get; set; }
         [Display(Name = "Category Number")]
         public string Catno { get; set; }
         public string Thumb { get; set; }

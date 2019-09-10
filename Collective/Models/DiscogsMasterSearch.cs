@@ -10,6 +10,7 @@ namespace Collective.Models
     {
         public int Id { get; set; }
         public string ImageUrl { get; set; }
+        [NotMapped]
         public List<string> Styles { get; set; }
         public int Num_For_Sale { get; set; }
         public string Title { get; set; }

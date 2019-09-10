@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using Newtonsoft.Json;
 using static Collective.Models.DiscogsSearch;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNetCore.Authorization;
 
 // This controller will be used for getting records from discogs, not from records inside the Collective database
 namespace Collective.Controllers
@@ -18,14 +21,19 @@ namespace Collective.Controllers
     public class SearchController : Controller
     {
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
-        private readonly string _keepItVinyl = @"&format=Vinyl&type=all&";
+        private readonly string _masterURL = @"https://api.discogs.com/masters/";
+        private readonly string _keepItVinyl = @"&format=Vinyl&per_page=10&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
+        private readonly SignInManager<ApplicationUser> _signInManger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SearchController(ApplicationDbContext context, IConfiguration config)
+        public SearchController(ApplicationDbContext context, IConfiguration config, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _config = config;
+            _signInManger = signInManager;
+            _userManager = userManager;
         }
 
         // GET: Search
@@ -73,6 +81,7 @@ namespace Collective.Controllers
         }
 
         // GET: Search/Details/5
+        [Authorize]
         [Route("Search/Details/{masterUrl}/{imageUrl}")]
         public async Task<IActionResult> Details(string masterUrl, string imageUrl)
         {
@@ -110,10 +119,47 @@ namespace Collective.Controllers
             return null;
         }
 
-        // GET: Search/Create
-        public IActionResult Create()
+        // GET: Search/Add
+        public async Task<IActionResult> Add(int? id, string imageUrl)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var key = _config["Discogs:Key"];
+            var secret = _config["Discogs:Secret"];
+            var query = id;
+            var vinyl = _keepItVinyl;
+            var url = $"{_masterURL}{query}";
+            var client = new HttpClient();
+
+            var newImageUrl = imageUrl.Replace("%2F", "/");
+
+            client.DefaultRequestHeaders.Add("user-agent", "Collective");
+
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
+                responseContent.ImageUrl = newImageUrl;
+
+                var currentUser = await GetCurrentUserAsync();
+
+                var collectionCheck = _context.Collection
+                    .Where(col => col.ApplicationUserId == currentUser.Id && col.Record.Master_Id == id);
+
+                if (collectionCheck != null)
+                {
+                    return View(responseContent);
+                }
+
+                //this needs to be an error that says the user already has it in their collection
+                return NotFound();
+            }
+
+            return NotFound();
         }
 
         // POST: Search/Create
@@ -121,7 +167,7 @@ namespace Collective.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
+        public async Task<IActionResult> Add([Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
         {
             if (ModelState.IsValid)
             {
@@ -155,7 +201,7 @@ namespace Collective.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
         {
-            if (id != record.Id)
+            if (id != record.Master_Id)
             {
                 return NotFound();
             }
@@ -169,7 +215,7 @@ namespace Collective.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecordExists(record.Id))
+                    if (!RecordExists(record.Master_Id))
                     {
                         return NotFound();
                     }
@@ -183,38 +229,11 @@ namespace Collective.Controllers
             return View(record);
         }
 
-        // GET: Search/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var record = await _context.Record
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (record == null)
-            {
-                return NotFound();
-            }
-
-            return View(record);
-        }
-
-        // POST: Search/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var record = await _context.Record.FindAsync(id);
-            _context.Record.Remove(record);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         private bool RecordExists(int id)
         {
-            return _context.Record.Any(e => e.Id == id);
+            return _context.Record.Any(e => e.Master_Id == id);
         }
     }
 }
