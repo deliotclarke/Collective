@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using Newtonsoft.Json;
 using static Collective.Models.DiscogsSearch;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNetCore.Authorization;
 
 // This controller will be used for getting records from discogs, not from records inside the Collective database
 namespace Collective.Controllers
@@ -21,11 +24,15 @@ namespace Collective.Controllers
         private readonly string _keepItVinyl = @"&format=Vinyl&type=all&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
+        private readonly SignInManager<ApplicationUser> _signInManger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SearchController(ApplicationDbContext context, IConfiguration config)
+        public SearchController(ApplicationDbContext context, IConfiguration config, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _config = config;
+            _signInManger = signInManager;
+            _userManager = userManager;
         }
 
         // GET: Search
@@ -73,6 +80,7 @@ namespace Collective.Controllers
         }
 
         // GET: Search/Details/5
+        [Authorize]
         [Route("Search/Details/{masterUrl}/{imageUrl}")]
         public async Task<IActionResult> Details(string masterUrl, string imageUrl)
         {
