@@ -191,35 +191,6 @@ namespace Collective.Controllers
             return View(record);
         }
 
-        // GET: Search/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var record = await _context.Record
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (record == null)
-            {
-                return NotFound();
-            }
-
-            return View(record);
-        }
-
-        // POST: Search/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var record = await _context.Record.FindAsync(id);
-            _context.Record.Remove(record);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool RecordExists(int id)
         {
             return _context.Record.Any(e => e.Id == id);
