@@ -55,7 +55,7 @@
                         <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
                     </td>
                     <td>
-                        <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-imageUrl="@Url.Content(item.Cover_Image)">Add</a>
+                        <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-imageUrl="@Url.Content(item.Cover_Image)" asp-route-title="@item.Title">Add</a>
                         @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                     </td>

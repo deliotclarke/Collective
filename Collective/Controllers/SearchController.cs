@@ -22,7 +22,7 @@ namespace Collective.Controllers
     {
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
         private readonly string _masterURL = @"https://api.discogs.com/masters/";
-        private readonly string _keepItVinyl = @"&format=Vinyl&per_page=10&";
+        private readonly string _keepItVinyl = @"&format=Vinyl&type=master&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly SignInManager<ApplicationUser> _signInManger;
@@ -121,7 +121,7 @@ namespace Collective.Controllers
 
         // GET: Search/Add
         [Authorize]
-        public async Task<IActionResult> Add(int? id, string imageUrl)
+        public async Task<IActionResult> Add(int? id, string imageUrl, string title)
         {
             if (id == null)
             {
@@ -143,8 +143,7 @@ namespace Collective.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var secondQuery = query.ToString();
-                var responseRegularContent = await GetRequestFromDiscogs(secondQuery);
+                var responseRegularContent = await GetRequestFromDiscogs(title);
                 var responseMasterContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();   
 
                 var currentUser = await GetCurrentUserAsync();
