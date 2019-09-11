@@ -11,6 +11,7 @@ namespace Collective.Models
     {
         [Key]
         [Display(Name = "Id")]
+        public int Id { get; set; }
         public int Master_Id { get; set; }
         [Display(Name = "Category Number")]
         public string Catno { get; set; }
@@ -19,24 +20,31 @@ namespace Collective.Models
         public string Artist { get; set; }
         public string Title { get; set; }
         [Display(Name = "Release Year")]
-        public string Year { get; set; }
+        public int Year { get; set; }
+        public string Condition { get; set; }
+        public string Master_Url { get; set; }
+
         [NotMapped]
         [Display(Name = "Label(s)")]
         public List<string> Label { get; set; }
+
         [NotMapped]
         public List<string> Style { get; set; }
+
+        [NotMapped]
         public Community Community { get; set; }
-        public string Condition { get; set; }
+
+        [NotMapped]
         [Display(Name = "Lowest Price Available")]
         public string Lowest_Price { get; set; }
+
+        [NotMapped]
         [Display(Name = "Track List")]
-        public string TrackList { get; set; }
+        public List<Track> TrackList { get; set; }
+
         [NotMapped]
         [Display(Name = "Barcode(s)")]
         public List<string> Barcode { get; set; }
-        public string Master_Url { get; set; }
-        public bool Owned { get; set; }
-        public bool TopFive { get; set; }
     }
 
     public class Barcode

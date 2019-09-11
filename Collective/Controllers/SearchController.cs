@@ -120,6 +120,7 @@ namespace Collective.Controllers
         }
 
         // GET: Search/Add
+        [Authorize]
         public async Task<IActionResult> Add(int? id, string imageUrl)
         {
             if (id == null)
@@ -129,7 +130,7 @@ namespace Collective.Controllers
 
             var key = _config["Discogs:Key"];
             var secret = _config["Discogs:Secret"];
-            var query = id;
+            int query = Convert.ToInt32(id);
             var vinyl = _keepItVinyl;
             var url = $"{_masterURL}{query}";
             var client = new HttpClient();
@@ -142,17 +143,37 @@ namespace Collective.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
-                responseContent.ImageUrl = newImageUrl;
+                var secondQuery = query.ToString();
+                var responseRegularContent = await GetRequestFromDiscogs(secondQuery);
+                var responseMasterContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();   
 
                 var currentUser = await GetCurrentUserAsync();
 
                 var collectionCheck = _context.Collection
-                    .Where(col => col.ApplicationUserId == currentUser.Id && col.Record.Master_Id == id);
+                    .Where(col => (col.ApplicationUserId == currentUser.Id) 
+                    &&(col.Record.Master_Id == id))
+                    .FirstOrDefault();
 
-                if (collectionCheck != null)
+                if (collectionCheck == null)
                 {
-                    return View(responseContent);
+
+                    var singleRegularRecord = responseRegularContent.Results.FirstOrDefault(rec => rec.Master_Id == query);
+
+                    Record record = new Record()
+                    {
+                        Master_Id = query,
+                        Catno = singleRegularRecord.Catno,
+                        Thumb = singleRegularRecord.Thumb,
+                        Cover_Image = singleRegularRecord.Cover_Image,
+                        Artist = responseMasterContent.Artists.First().Name,
+                        Title = responseMasterContent.Title,
+                        Year = responseMasterContent.Year,
+                        TrackList = responseMasterContent.Tracklist,
+                        Barcode = singleRegularRecord.Barcode.ToList(),
+                        Master_Url = singleRegularRecord.Master_Url
+                    };
+
+                    return View(record);
                 }
 
                 //this needs to be an error that says the user already has it in their collection
@@ -167,7 +188,7 @@ namespace Collective.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
+        public async Task<IActionResult> Add([Bind("Master_Id,Catno,Thumb,Cover_Image,Artist,Title,Year,Label,Condition,TrackList,Barcode, Master_Url")] Record record)
         {
             if (ModelState.IsValid)
             {
