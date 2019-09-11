@@ -121,7 +121,7 @@ namespace Collective.Controllers
 
         // GET: Search/Add
         [Authorize]
-        public async Task<IActionResult> Add(int? id, string imageUrl, string title)
+        public async Task<IActionResult> Add(int? id, string title)
         {
             if (id == null)
             {
@@ -134,8 +134,6 @@ namespace Collective.Controllers
             var vinyl = _keepItVinyl;
             var url = $"{_masterURL}{query}";
             var client = new HttpClient();
-
-            var newImageUrl = imageUrl.Replace("%2F", "/");
 
             client.DefaultRequestHeaders.Add("user-agent", "Collective");
 
@@ -189,10 +187,26 @@ namespace Collective.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([Bind("Master_Id,Catno,Thumb,Cover_Image,Artist,Title,Year,Label,Condition,TrackList,Barcode, Master_Url")] Record record)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(record);
+                var user = await GetCurrentUserAsync();
+
+                _context.Record.Add(record);
                 await _context.SaveChangesAsync();
+
+                var collection = new Collection()
+                {
+                    ApplicationUserId = user.Id,
+                    RecordId = record.Id,
+                    DateAdded = DateTime.Now,
+                    NeedList = false,
+                    TopFive = false
+                };
+
+                _context.Collection.Add(collection);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(record);

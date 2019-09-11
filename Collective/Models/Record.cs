@@ -12,16 +12,25 @@ namespace Collective.Models
         [Key]
         [Display(Name = "Id")]
         public int Id { get; set; }
+        [Required]
         public int Master_Id { get; set; }
+        [Required]
         [Display(Name = "Category Number")]
         public string Catno { get; set; }
+        [Required]
         public string Thumb { get; set; }
+        [Required]
         public string Cover_Image { get; set; }
+        [Required]
         public string Artist { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         [Display(Name = "Release Year")]
         public int Year { get; set; }
+        [Required]
         public string Condition { get; set; }
+        [Required]
         public string Master_Url { get; set; }
 
         [NotMapped]
