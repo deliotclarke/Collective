@@ -36,6 +36,8 @@ namespace Collective.Controllers
             _userManager = userManager;
         }
 
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         // GET: Search
         public async Task<IActionResult> Index(string searchString)
         {
@@ -262,8 +264,6 @@ namespace Collective.Controllers
             }
             return View(record);
         }
-
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         private bool RecordExists(int id)
         {
