@@ -1,43 +1,41 @@
-﻿@model IEnumerable<Collective.Models.Record>
+﻿@model IEnumerable<Collective.Models.Collection>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>@Model.FirstOrDefault().ApplicationUser.UserName's Collection</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Master_Id)
+                @Html.DisplayNameFor(model => model.Record.Master_Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Catno)
+                @Html.DisplayNameFor(model => model.Record.Catno)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Thumb)
+                @Html.DisplayNameFor(model => model.Record.Thumb)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cover_Image)
+                @Html.DisplayNameFor(model => model.Record.Cover_Image)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Artist)
+                @Html.DisplayNameFor(model => model.Record.Artist)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Record.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model.Record.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Condition)
+                @Html.DisplayNameFor(model => model.Record.Condition)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Master_Url)
+                @Html.DisplayNameFor(model => model.Record.Master_Url)
             </th>
             <th></th>
         </tr>
@@ -46,31 +44,31 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Master_Id)
+                @Html.DisplayFor(modelItem => item.Record.Master_Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Catno)
+                @Html.DisplayFor(modelItem => item.Record.Catno)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Thumb)
+                @Html.DisplayFor(modelItem => item.Record.Thumb)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cover_Image)
+                @Html.DisplayFor(modelItem => item.Record.Cover_Image)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Artist)
+                @Html.DisplayFor(modelItem => item.Record.Artist)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Record.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Year)
+                @Html.DisplayFor(modelItem => item.Record.Year)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Condition)
+                @Html.DisplayFor(modelItem => item.Record.Condition)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Master_Url)
+                @Html.DisplayFor(modelItem => item.Record.Master_Url)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

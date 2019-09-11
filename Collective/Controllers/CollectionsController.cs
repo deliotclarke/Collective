@@ -9,6 +9,7 @@ using Collective.Data;
 using Collective.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Collective.Controllers
 {
@@ -30,10 +31,23 @@ namespace Collective.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Collections
+        [Authorize]
+
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Collection.Include(c => c.ApplicationUser).Include(c => c.Record);
-            return View(await applicationDbContext.ToListAsync());
+
+            var user = await GetCurrentUserAsync();
+
+            var userCollection = _context.Collection
+                .Include(co => co.Record)
+                .Where(co => co.ApplicationUserId == user.Id).ToList();
+
+            if(userCollection != null)
+            { 
+                return View(userCollection);
+            }
+
+            return NotFound();
         }
 
         // GET: Collections/Details/5
