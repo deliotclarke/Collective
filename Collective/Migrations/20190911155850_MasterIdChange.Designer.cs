@@ -4,14 +4,16 @@ using Collective.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Collective.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190911155850_MasterIdChange")]
+    partial class MasterIdChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,30 +185,23 @@ namespace Collective.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Artist")
-                        .IsRequired();
+                    b.Property<string>("Artist");
 
-                    b.Property<string>("Catno")
-                        .IsRequired();
+                    b.Property<string>("Catno");
 
-                    b.Property<string>("Condition")
-                        .IsRequired();
+                    b.Property<string>("Condition");
 
-                    b.Property<string>("Cover_Image")
-                        .IsRequired();
+                    b.Property<string>("Cover_Image");
 
                     b.Property<int>("Master_Id");
 
-                    b.Property<string>("Master_Url")
-                        .IsRequired();
+                    b.Property<string>("Master_Url");
 
-                    b.Property<string>("Thumb")
-                        .IsRequired();
+                    b.Property<string>("Thumb");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
-                    b.Property<int>("Year");
+                    b.Property<string>("Year");
 
                     b.HasKey("Id");
 

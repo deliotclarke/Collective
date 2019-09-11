@@ -22,7 +22,7 @@ namespace Collective.Controllers
     {
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
         private readonly string _masterURL = @"https://api.discogs.com/masters/";
-        private readonly string _keepItVinyl = @"&format=Vinyl&per_page=10&";
+        private readonly string _keepItVinyl = @"&format=Vinyl&type=master&";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly SignInManager<ApplicationUser> _signInManger;
@@ -120,7 +120,8 @@ namespace Collective.Controllers
         }
 
         // GET: Search/Add
-        public async Task<IActionResult> Add(int? id, string imageUrl)
+        [Authorize]
+        public async Task<IActionResult> Add(int? id, string title)
         {
             if (id == null)
             {
@@ -129,12 +130,10 @@ namespace Collective.Controllers
 
             var key = _config["Discogs:Key"];
             var secret = _config["Discogs:Secret"];
-            var query = id;
+            int query = Convert.ToInt32(id);
             var vinyl = _keepItVinyl;
             var url = $"{_masterURL}{query}";
             var client = new HttpClient();
-
-            var newImageUrl = imageUrl.Replace("%2F", "/");
 
             client.DefaultRequestHeaders.Add("user-agent", "Collective");
 
@@ -142,17 +141,36 @@ namespace Collective.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
-                responseContent.ImageUrl = newImageUrl;
+                var responseRegularContent = await GetRequestFromDiscogs(title);
+                var responseMasterContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();   
 
                 var currentUser = await GetCurrentUserAsync();
 
                 var collectionCheck = _context.Collection
-                    .Where(col => col.ApplicationUserId == currentUser.Id && col.Record.Master_Id == id);
+                    .Where(col => (col.ApplicationUserId == currentUser.Id) 
+                    &&(col.Record.Master_Id == id))
+                    .FirstOrDefault();
 
-                if (collectionCheck != null)
+                if (collectionCheck == null)
                 {
-                    return View(responseContent);
+
+                    var singleRegularRecord = responseRegularContent.Results.FirstOrDefault(rec => rec.Master_Id == query);
+
+                    Record record = new Record()
+                    {
+                        Master_Id = query,
+                        Catno = singleRegularRecord.Catno,
+                        Thumb = singleRegularRecord.Thumb,
+                        Cover_Image = singleRegularRecord.Cover_Image,
+                        Artist = responseMasterContent.Artists.First().Name,
+                        Title = responseMasterContent.Title,
+                        Year = responseMasterContent.Year,
+                        TrackList = responseMasterContent.Tracklist,
+                        Barcode = singleRegularRecord.Barcode.ToList(),
+                        Master_Url = singleRegularRecord.Master_Url
+                    };
+
+                    return View(record);
                 }
 
                 //this needs to be an error that says the user already has it in their collection
@@ -167,12 +185,28 @@ namespace Collective.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("Id,Artist,Title,RecordCompany,Condition,TrackList,Barcode")] Record record)
+        public async Task<IActionResult> Add([Bind("Master_Id,Catno,Thumb,Cover_Image,Artist,Title,Year,Label,Condition,TrackList,Barcode, Master_Url")] Record record)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(record);
+                var user = await GetCurrentUserAsync();
+
+                _context.Record.Add(record);
                 await _context.SaveChangesAsync();
+
+                var collection = new Collection()
+                {
+                    ApplicationUserId = user.Id,
+                    RecordId = record.Id,
+                    DateAdded = DateTime.Now,
+                    NeedList = false,
+                    TopFive = false
+                };
+
+                _context.Collection.Add(collection);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(record);

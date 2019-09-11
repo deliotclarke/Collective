@@ -1,4 +1,4 @@
-﻿@model Collective.Models.DiscogsMasterSearch
+﻿@model Collective.Models.Record
 
 @{
     ViewData["Title"] = "Add";
@@ -11,40 +11,63 @@
 <div class="row">
     <div class="col-md-10">
         <form asp-action="Add">
-            <img class="col-md-3 mb-4 mt-4" src="@Model.ImageUrl" alt="Album Thumb" />
-            <h5 class="col-md-12 mb-4">Are you sure you want to add @Model.Title by @Model.Artists.First().Name to your Collection?</h5>
+            <img class="col-md-3 mb-4 mt-4" src="@Model.Thumb" alt="Album Thumb" />
+            <h5 class="col-md-12 mb-4">Are you sure you want to add @Model.Title by @Model.Artist to your Collection?</h5>
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="hidden" asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <input type="hidden" asp-for="Master_Id" class="form-control" />
+                <span asp-validation-for="Master_Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="Num_For_Sale" class="form-control" />
-                <span asp-validation-for="Num_For_Sale" class="text-danger"></span>
+                <input type="hidden" asp-for="Catno" class="form-control" />
+                <span asp-validation-for="Catno" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Thumb" class="form-control" />
+                <span asp-validation-for="Thumb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Cover_Image" class="form-control" />
+                <span asp-validation-for="Cover_Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Artist" class="form-control" />
+                <span asp-validation-for="Artist" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="hidden" asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="Main_Release_Url" class="form-control" />
-                <span asp-validation-for="Main_Release_Url" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="hidden" asp-for="Year" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="Resource_Url" class="form-control" />
-                <span asp-validation-for="Resource_Url" class="text-danger"></span>
+                <label class="control-label">Select condition before adding to Collection:</label>
+                @Html.DropDownListFor(model => model.Condition, new SelectList(
+                  new List<Object>{
+                       new { value = "Unselected", text ="Please Select..." },
+                       new { value = "M" , text = "Mint"  },
+                       new { value = "NM" , text = "Near Mint" },
+                       new { value = "VG+" , text = "Very Good Plus" },
+                       new { value = "VG", text = "Very Good" },
+                       new { value = "G+", text ="Good Plus" },
+                       new { value = "G", text = "Good" },
+                       new { value = "F", text = "Fair" },
+                       new { value = "P", text = "Poor" }
+                    },
+                  "value",
+                  "text",
+                   2))
+                <span asp-validation-for="Condition" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="Notes" class="form-control" />
-                <span asp-validation-for="Notes" class="text-danger"></span>
+                <input type="hidden" asp-for="Master_Url" class="form-control" />
+                <span asp-validation-for="Master_Url" class="text-danger"></span>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group">
                 <input type="submit" value="Add To Collection" class="btn btn-primary" />
             </div>
         </form>
