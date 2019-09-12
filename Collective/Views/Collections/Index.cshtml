@@ -10,19 +10,9 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Record.Master_Id)
+                Master Release Id
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Record.Catno)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Thumb)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Cover_Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Artist)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Record.Title)
@@ -32,9 +22,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Record.Condition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Master_Url)
             </th>
             <th></th>
         </tr>
@@ -46,16 +33,7 @@
                 @Html.DisplayFor(modelItem => item.Record.Master_Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Record.Catno)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Thumb)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Cover_Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Artist)
+                <img style="height:150px" src="@Url.Content(item.Record.Cover_Image)" alt="album cover"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Record.Title)
@@ -66,9 +44,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Record.Condition)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Master_Url)
-            </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

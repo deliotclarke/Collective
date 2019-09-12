@@ -209,7 +209,7 @@ namespace Collective.Controllers
                 _context.Collection.Add(collection);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Collections");
             }
             return View(record);
         }
