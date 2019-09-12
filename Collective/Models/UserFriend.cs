@@ -14,6 +14,5 @@ namespace Collective.Models
         public ApplicationUser Friend { get; set; }
         public bool Pending { get; set; }
         public DateTime DateAdded { get; set; }
-
     }
 }

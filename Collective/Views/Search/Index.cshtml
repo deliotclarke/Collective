@@ -1,4 +1,14 @@
 ﻿@model IEnumerable<Collective.Models.Record>
+@using Collective.Data
+@using Microsoft.AspNetCore.Identity
+@using System.Linq
+@using Collective.Models
+@using Microsoft.EntityFrameworkCore
+@using Collective.Controllers
+
+@inject ApplicationDbContext _context
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
 
 @{
     ViewData["Title"] = "Search";
@@ -55,12 +65,26 @@
                         <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
                     </td>
                     <td>
-                        <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-title="@item.Title">Add</a>
-                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                    </td>
-                </tr>
-            }
+                        <div style="text-align:center">
+                            <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-title="@item.Title">Add</a>
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                var userId = userManager.GetUserAsync(User).Result.Id;
+                                var userCollection = _context.Collection
+                                    .Include(col => col.Record)
+                                    .Where(col => col.ApplicationUserId == userId);
+                                if (userCollection.Any(col => col.Record.Master_Id == item.Master_Id))
+                                {
+                                    <a asp-controller="Collections" asp-action="Index" asp-route-id="@item.Master_Id">
+                                        <button class="btn btn-sm btn-danger" value="Owned">Owned</button></a>
+                                    }
+                                }
+                                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                    </div>
+                </td>
+            </tr>
+        }
         </tbody>
     }
 </table>
