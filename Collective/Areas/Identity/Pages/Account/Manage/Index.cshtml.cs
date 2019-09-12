@@ -4,11 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Collective.Data;
 using Collective.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Collective.Areas.Identity.Pages.Account.Manage
 {
@@ -16,15 +18,18 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
             _emailSender = emailSender;
         }
 
@@ -47,6 +52,18 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Required, MaxLength(20), MinLength(2)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required, MaxLength(20), MinLength(2)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [MaxLength(255)]
+            [Display(Name = "Bio")]
+            public string Bio { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -60,13 +77,20 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var firstName = user.FirstName;
+            var lastName = user.LastName;
+            var bio = user.Bio;
+
 
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = firstName,
+                LastName = lastName,
+                Bio = bio
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -109,6 +133,39 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            var firstName = user.FirstName;
+            if (Input.FirstName != firstName)
+            {
+                var setFirstNameResult = await SetUserFirstName(user, Input.FirstName);
+                if(!setFirstNameResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occured setting first name for user with ID {userId}.");
+                }
+            }
+
+            var lastName = user.LastName;
+            if (Input.LastName != lastName)
+            {
+                var setLastNameResult = await SetUserLastName(user, Input.LastName);
+                if (!setLastNameResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occured setting last name for user with ID {userId}.");
+                }
+            }
+
+            var bio = user.Bio;
+            if (Input.Bio != bio)
+            {
+                var setBioResult = await SetUserBio(user, Input.Bio);
+                if (!setBioResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occured setting bio for user with ID {userId}.");
+                }
+            }
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
@@ -143,6 +200,27 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();
+        }
+
+        public async Task<IdentityResult> SetUserFirstName(ApplicationUser user, string newName)
+        {
+            user.FirstName = newName;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            return result;
+        }
+
+        public async Task<IdentityResult> SetUserLastName(ApplicationUser user, string newName)
+        {
+            user.LastName = newName;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            return result;
+        }
+
+        public async Task<IdentityResult> SetUserBio(ApplicationUser user, string newBio)
+        {
+            user.Bio = newBio;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            return result;
         }
     }
 }
