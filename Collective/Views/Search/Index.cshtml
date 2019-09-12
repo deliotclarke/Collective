@@ -40,9 +40,9 @@
                         @Html.DisplayFor(modelItem => item.Catno)
                     </td>
                     <td>
-                        @if (item.Thumb != null)
+                        @if (item.Cover_Image != null)
                         {
-                            <img src="@Url.Content(item.Thumb)" alt="Album Thumb" />
+                            <img style="height:150px" src="@Url.Content(item.Cover_Image)" alt="Album Thumb" />
                         }
                     </td>
                     <td>

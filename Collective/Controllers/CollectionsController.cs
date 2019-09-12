@@ -32,7 +32,6 @@ namespace Collective.Controllers
 
         // GET: Collections
         [Authorize]
-
         public async Task<IActionResult> Index()
         {
 
@@ -159,10 +158,13 @@ namespace Collective.Controllers
                 return NotFound();
             }
 
+            var user = await GetCurrentUserAsync();
+
             var collection = await _context.Collection
-                .Include(c => c.ApplicationUser)
                 .Include(c => c.Record)
+                .Where(c => c.ApplicationUserId == user.Id)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (collection == null)
             {
                 return NotFound();
