@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-10">
         <form asp-action="Add">
-            <img class="col-md-3 mb-4 mt-4" src="@Model.Thumb" alt="Album Thumb" />
+            <img class="col-md-3 mb-4 mt-4" src="@Model.Cover_Image" alt="Album Thumb" />
             <h5 class="col-md-12 mb-4">Are you sure you want to add @Model.Title by @Model.Artist to your Collection?</h5>
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

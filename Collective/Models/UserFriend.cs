@@ -11,7 +11,7 @@ namespace Collective.Models
         public int ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public int FriendId { get; set; }
-        public ApplicationUser ApplicationUserFriend { get; set; }
+        public ApplicationUser Friend { get; set; }
         public bool Pending { get; set; }
         public DateTime DateAdded { get; set; }
 

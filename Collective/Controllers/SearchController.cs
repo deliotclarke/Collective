@@ -36,6 +36,8 @@ namespace Collective.Controllers
             _userManager = userManager;
         }
 
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         // GET: Search
         public async Task<IActionResult> Index(string searchString)
         {
@@ -207,7 +209,7 @@ namespace Collective.Controllers
                 _context.Collection.Add(collection);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Collections");
             }
             return View(record);
         }
@@ -262,8 +264,6 @@ namespace Collective.Controllers
             }
             return View(record);
         }
-
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         private bool RecordExists(int id)
         {
