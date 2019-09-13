@@ -15,6 +15,14 @@
                 <div class="mb-5" style="width:200px;height:200px;position:relative;overflow:hidden;border-radius:50%;">
                     <img style="display:inline;margin:0,auto;margin-left:-25%;height:100%;width:auto;" src="@Url.Content(Model.User.UserImgPath)" alt="User Profile Image" />
                 </div>
+                @using (Html.BeginForm("RemovePhoto", "Home", FormMethod.Post))
+                {
+                    <div class="col-sm-5">
+                        <form asp-controller="Home" asp-action="RemovePhoto">
+                            <input type="hidden" value="Delete" class="btn btn-danger btn-sm" />
+                        </form>
+                    </div>
+                }
             }
             else
             {
@@ -63,11 +71,11 @@
                     <dd class="col-sm-5 mb-0">
                         @Html.DisplayFor(model => model.User.Bio)
                     </dd>
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
                         @using (Html.BeginForm("RemoveBio", "Home", FormMethod.Post))
                         {
                             <form asp-controller="Home" asp-action="RemoveBio">
-                                <input style="float:right" type="submit" value="Rewrite Bio" class="btn btn-danger btn-sm" />
+                                <input style="float:right;" type="submit" value="Rewrite Bio" class="btn btn-danger btn-sm" />
                             </form>
                         }
                     </div>
