@@ -117,7 +117,7 @@ namespace Collective.Controllers
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
-                    relFilePath = $"~/images/{filePath}";
+                    relFilePath = $"~/images/{fileName}";
                 }
             }
 

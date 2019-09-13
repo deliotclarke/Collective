@@ -1,7 +1,5 @@
 ﻿@model Collective.Models.ProfileViewModel.ProfileViewModel
 
-@using NuGet.Frameworks
-
 @{
     ViewData["Title"] = "Profile";
 }
@@ -11,14 +9,14 @@
         <div class="col-sm-5">
             @if (Model.User.UserImgPath != null)
             {
-                <img class="col-sm-10 mb-5 small" src="@Url.Content(Model.User.UserImgPath)" alt="User Profile Image" />
+                <img class="col-sm-10 mb-5" src="@Url.Content(Model.User.UserImgPath)" alt="User Profile Image" />
                 @*<h4 class="col-sm-8">Tracklist:</h4>
-                    <ol>
-                        @foreach (var track in Model.Tracklist)
-                        {
-                            <li>@Html.DisplayFor(Tracklist => track.Title) - @Html.DisplayFor(Tracklist => track.Duration)</li>
-                        }
-                    </ol>*@
+            <ol>
+                @foreach (var track in Model.Tracklist)
+                {
+                    <li>@Html.DisplayFor(Tracklist => track.Title) - @Html.DisplayFor(Tracklist => track.Duration)</li>
+                }
+            </ol>*@
 
             }
             else
@@ -62,20 +60,20 @@
                     <a asp-controller="Collection" asp-action="Index">My Collection (@Model.Collection.Count())</a>
                 </div>
                 @*<dd class="col-sm-10">
-                        @foreach (var artist in Model.Collection.TopFive)
-                        {
-                            @Html.DisplayFor(Artist => artist.Name)
-                        }
-                    </dd>*@
+                @foreach (var artist in Model.Collection.TopFive)
+                {
+                    @Html.DisplayFor(Artist => artist.Name)
+                }
+            </dd>*@
                 @*@if (Model.Notes != null)
-                    {
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Notes)
-                        </dt>
-                        <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Notes)
-                        </dd>
-                    }*@
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Notes)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Notes)
+                </dd>
+            }*@
             </dl>
         </div>
         @*add buttons for adding to different lists/removing*@
