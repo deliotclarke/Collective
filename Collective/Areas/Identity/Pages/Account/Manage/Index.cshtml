@@ -6,7 +6,7 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
+<h4 style="display:inline-block">@ViewData["Title"]</h4><span class="ml-4"><a asp-controller="Home" asp-action="Profile">View Public Profile</a></span>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">

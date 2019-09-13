@@ -7,7 +7,6 @@
 <h1>Profile</h1>
 
 <div>
-    <h4>DiscogsMasterSearch</h4>
     <hr />
     <div class="row">
         <div class="col-sm-5">
@@ -15,38 +14,38 @@
             {
                 <img class="col-sm-10 mb-5 small" src="@Url.Content(Model.User.UserImgPath)" alt="User Profile Image" />
                 @*<h4 class="col-sm-8">Tracklist:</h4>
-                <ol>
-                    @foreach (var track in Model.Tracklist)
-                    {
-                        <li>@Html.DisplayFor(Tracklist => track.Title) - @Html.DisplayFor(Tracklist => track.Duration)</li>
-                    }
-                </ol>*@
+            <ol>
+                @foreach (var track in Model.Tracklist)
+                {
+                    <li>@Html.DisplayFor(Tracklist => track.Title) - @Html.DisplayFor(Tracklist => track.Duration)</li>
+                }
+            </ol>*@
 
             }
-        </div>
-        <dl class="col">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.UserName)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.UserName)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Bio)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Bio)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Collection.TopFive)
-            </dt>
-            @*<dd class="col-sm-10">
+
+            <dl>
+                <dt class="col-sm-5">
+                    @Html.DisplayNameFor(model => model.User.UserName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.User.UserName)
+                </dd>
+                <dt class="col-sm-5">
+                    @Html.DisplayNameFor(model => model.User.Bio)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.User.Bio)
+                </dd>
+                <dt class="col-sm-5">
+                    @Html.DisplayNameFor(model => model.Collection)
+                </dt>
+                @*<dd class="col-sm-10">
                 @foreach (var artist in Model.Collection.TopFive)
                 {
                     @Html.DisplayFor(Artist => artist.Name)
                 }
             </dd>*@
-            @*@if (Model.Notes != null)
+                @*@if (Model.Notes != null)
             {
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Notes)
@@ -55,7 +54,8 @@
                     @Html.DisplayFor(model => model.Notes)
                 </dd>
             }*@
-        </dl>
+            </dl>
+        </div>
         @*add buttons for adding to different lists/removing*@
     </div>
 </div>

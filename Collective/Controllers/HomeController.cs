@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Collective.Models.ProfileViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Collective.Controllers
 {
@@ -38,7 +39,8 @@ namespace Collective.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ProfileAsync()
+        [Authorize]
+        public async Task<IActionResult> Profile()
         {
             var user = await GetCurrentUserAsync();
 
