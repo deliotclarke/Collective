@@ -20,7 +20,7 @@ namespace Collective.Models
         [MaxLength(200)]
         [Display(Name = "About Me")]
         public string Bio { get; set; }
-        public string UserImg { get; set; }
+        public string UserImgPath { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
     }

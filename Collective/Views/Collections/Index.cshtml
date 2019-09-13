@@ -1,57 +1,76 @@
 ﻿@model IEnumerable<Collective.Models.Collection>
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
 
 @{
     ViewData["Title"] = "Index";
 }
+@if (Model.Count() > 0)
+{
+    @if (signInManager.IsSignedIn(User))
+    {
+        <h1>@userManager.GetUserAsync(User).Result.UserName's Milk Crate</h1>
+    }
 
-<h1>@Model.FirstOrDefault().ApplicationUser.UserName's Milk Crate</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Master Release Id
-            </th>
-            <th>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Record.Condition)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Master_Id)
-            </td>
-            <td>
-                <img style="height:150px" src="@Url.Content(item.Record.Cover_Image)" alt="album cover"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Record.Condition)
-            </td>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Master Release Id
+                </th>
+                <th>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Record.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Record.Year)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Record.Condition)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Record.Master_Id)
+                    </td>
+                    <td>
+                        <img style="height:150px" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Record.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Record.Year)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Record.Condition)
+                    </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><br />
-                <a>Add Memory</a><br />
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a><br />
-                <a asp-action="Delete" asp-route-id="@item.Id">Remove</a><br />
-            </td>
-        </tr>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><br />
+                        <a>Add Memory</a><br />
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a><br />
+                        <a asp-action="Delete" asp-route-id="@item.Id">Remove</a><br />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="text-center">
+        <h3>Your Milk Crate is empty! Lets get Started!</h3>
+        <a asp-controller="Search" asp-action="Index">Go To Search</a>
+    </div>
+}

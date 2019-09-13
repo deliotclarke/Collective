@@ -9,10 +9,13 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190911153457_MasterId.cs" />
     <Compile Remove="Migrations\20190911153457_MasterId.Designer.cs" />
+    <Compile Remove="Migrations\20190913141830_UserImgDataType.cs" />
+    <Compile Remove="Migrations\20190913141830_UserImgDataType.Designer.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
