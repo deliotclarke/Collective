@@ -27,18 +27,21 @@
                 <div style="text-align:center" class="col-sm-10 mb-5 small">
                     <i class="far fa-user fa-10x"></i>
                     <h5>No Profile Image</h5>
-
-                    <form asp-controller="Home" asp-action="UploadImage" asp-route-id="@Model.User.Id" method="post">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <input type="submit" value="Upload" class="btn btn-secondary btn-sm" />
+                    @using (Html.BeginForm("ImageUpload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <form asp-controller="Home" asp-action="ImageUpload">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <input type="submit" value="Upload" class="btn btn-secondary btn-sm" />
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png" class="custom-file-input" />
+                                    <label style="text-align:left" class="custom-file-label"></label>
+                                </div>
                             </div>
-                            <div class="custom-file">
-                                <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png" class="custom-file-input" />
-                                <label style="text-align:left" class="custom-file-label">Choose File</label>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    }
                 </div>
             }
 
