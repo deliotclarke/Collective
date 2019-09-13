@@ -1,5 +1,7 @@
 ﻿@model Collective.Models.ProfileViewModel.ProfileViewModel
 
+@using NuGet.Frameworks
+
 @{
     ViewData["Title"] = "Profile";
 }
@@ -22,6 +24,11 @@
             </ol>*@
 
             }
+            else
+            {
+                <p>else</p>
+                <i class="fa fa-camera-retro"></i>
+            }
 
             <dl>
                 <dt class="col-sm-5">
@@ -36,9 +43,9 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.User.Bio)
                 </dd>
-                <dt class="col-sm-5">
-                    @Html.DisplayNameFor(model => model.Collection)
-                </dt>
+                <div class="col-sm-10">
+                    <a asp-controller="Collection" asp-action="Index">My Collection (@Model.Collection.Count())</a>
+                </div>
                 @*<dd class="col-sm-10">
                 @foreach (var artist in Model.Collection.TopFive)
                 {
