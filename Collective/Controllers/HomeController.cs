@@ -92,6 +92,38 @@ namespace Collective.Controllers
             return NotFound();
         }
 
+        [Authorize]
+        [HttpPost("AddBio")]
+        public async Task<IActionResult> AddBio(string BioString)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user.Bio != BioString)
+            {
+                user.Bio = BioString;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Profile));
+        }
+
+        [Authorize]
+        [HttpPost("RemoveBio")]
+        public async Task<IActionResult> RemoveBio()
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user.Bio != null)
+            {
+                user.Bio = null;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Profile));
+        }
+
         private async Task<string> SaveFile(IFormFile file, string userId)
         {
             if (file.Length > 5242880)
