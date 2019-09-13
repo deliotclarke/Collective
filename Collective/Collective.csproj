@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190911153457_MasterId.cs" />
     <Compile Remove="Migrations\20190911153457_MasterId.Designer.cs" />
+    <Compile Remove="Migrations\20190913141830_UserImgDataType.cs" />
+    <Compile Remove="Migrations\20190913141830_UserImgDataType.Designer.cs" />
   </ItemGroup>
 
 

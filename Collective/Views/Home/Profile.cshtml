@@ -1,4 +1,4 @@
-﻿@model Collective.Models.ApplicationUser
+﻿@model Collective.Models.ProfileViewModel.ProfileViewModel
 
 @{
     ViewData["Title"] = "Profile";
@@ -6,59 +6,47 @@
 
 <h1>Profile</h1>
 
-@*<div>
+<div>
     <h4>DiscogsMasterSearch</h4>
     <hr />
     <div class="row">
         <div class="col-sm-5">
-            @if (Model.ImageUrl != null)
+            @if (Model.User.UserImgPath != null)
             {
-                <img class="col-sm-10 mb-5 small" src="@Url.Content(Model.ImageUrl)" alt="Album Thumb" />
-                <h4 class="col-sm-8">Tracklist:</h4>
+                <img class="col-sm-10 mb-5 small" src="@Url.Content(Model.User.UserImgPath)" alt="User Profile Image" />
+                @*<h4 class="col-sm-8">Tracklist:</h4>
                 <ol>
                     @foreach (var track in Model.Tracklist)
                     {
                         <li>@Html.DisplayFor(Tracklist => track.Title) - @Html.DisplayFor(Tracklist => track.Duration)</li>
                     }
-                </ol>
+                </ol>*@
 
             }
         </div>
         <dl class="col">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model.User.UserName)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Year)
+                @Html.DisplayFor(model => model.User.UserName)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Artists)
+                @Html.DisplayNameFor(model => model.User.Bio)
             </dt>
             <dd class="col-sm-10">
-                @foreach (var artist in Model.Artists)
+                @Html.DisplayFor(model => model.User.Bio)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Collection.TopFive)
+            </dt>
+            @*<dd class="col-sm-10">
+                @foreach (var artist in Model.Collection.TopFive)
                 {
                     @Html.DisplayFor(Artist => artist.Name)
                 }
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Title)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Title)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Num_For_Sale)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Num_For_Sale)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Main_Release_Url)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Main_Release_Url)
-            </dd>
-            @if (Model.Notes != null)
+            </dd>*@
+            @*@if (Model.Notes != null)
             {
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Notes)
@@ -66,11 +54,8 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Notes)
                 </dd>
-            }
-        </dl>*@
+            }*@
+        </dl>
         @*add buttons for adding to different lists/removing*@
-    @*</div>
+    </div>
 </div>
-<div class="mt-5">
-    <a class="col-sm" asp-controller="Search" asp-action="Index">Back to Search</a>
-</div>*@

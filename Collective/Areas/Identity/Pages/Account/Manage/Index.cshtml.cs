@@ -60,10 +60,6 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
             [Required, MaxLength(20), MinLength(2)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
-
-            [MaxLength(255)]
-            [Display(Name = "Bio")]
-            public string Bio { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -79,8 +75,6 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var firstName = user.FirstName;
             var lastName = user.LastName;
-            var bio = user.Bio;
-
 
             Username = userName;
 
@@ -90,7 +84,6 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 FirstName = firstName,
                 LastName = lastName,
-                Bio = bio
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -155,17 +148,6 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var bio = user.Bio;
-            if (Input.Bio != bio)
-            {
-                var setBioResult = await SetUserBio(user, Input.Bio);
-                if (!setBioResult.Succeeded)
-                {
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occured setting bio for user with ID {userId}.");
-                }
-            }
-
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
@@ -212,13 +194,6 @@ namespace Collective.Areas.Identity.Pages.Account.Manage
         public async Task<IdentityResult> SetUserLastName(ApplicationUser user, string newName)
         {
             user.LastName = newName;
-            IdentityResult result = await _userManager.UpdateAsync(user);
-            return result;
-        }
-
-        public async Task<IdentityResult> SetUserBio(ApplicationUser user, string newBio)
-        {
-            user.Bio = newBio;
             IdentityResult result = await _userManager.UpdateAsync(user);
             return result;
         }
