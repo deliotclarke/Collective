@@ -6,7 +6,8 @@
     <title>@ViewData["Title"] - Collective</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-collective.css" />
+        <link href="https://fonts.googleapis.com/css?family=Exo|Roboto&display=swap" rel="stylesheet">
         <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
@@ -22,9 +23,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav style="background-color:#F2D272;" class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Collective</a>
+                <a style="color:#734D2C;" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Collective</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -33,13 +34,13 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a style="color:#734D2C;" class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Search" asp-action="Index">Search</a>
+                            <a style="color:#734D2C;" class="nav-link" asp-area="" asp-controller="Search" asp-action="Index">Search</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Collections" asp-action="Index">Milk Crate</a>
+                            <a style="color:#734D2C;" class="nav-link" asp-area="" asp-controller="Collections" asp-action="Index">Milk Crate</a>
                         </li>
                     </ul>
                 </div>
