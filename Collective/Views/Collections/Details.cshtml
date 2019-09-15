@@ -9,32 +9,70 @@
 <div>
     <h4>Collection</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Record.Artist)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Record.Artist)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Record.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Record.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NeedList)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NeedList)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TopFive)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TopFive)
-        </dd>
-    </dl>
+    <div class="row">
+        <dl class="col-sm-5">
+            <div class="col-sm-2">
+                <img style="height:200px;" src="@Url.Content(Model.Record.Cover_Image)" alt="cover image"/>
+            </div>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Record.Artist)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Record.Artist)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Record.Title)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Record.Title)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NeedList)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.NeedList)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.TopFive)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.TopFive)
+            </dd>
+        </dl>
+        <div class="col">
+            <div class="col-sm-10">
+                <h4>Memories</h4>
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

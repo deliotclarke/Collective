@@ -63,7 +63,8 @@ namespace Collective.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             var memories = await _context.Memory
-                .Where(m => m.RecordId == collection.RecordId && m.ApplicationUserId == collection.ApplicationUserId).ToListAsync();
+                .Where(m => m.RecordId == collection.RecordId && m.ApplicationUserId == collection.ApplicationUserId)
+                .ToListAsync();
 
             if (collection == null)
             {
