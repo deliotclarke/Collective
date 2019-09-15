@@ -61,6 +61,10 @@ namespace Collective.Controllers
                 .Include(c => c.ApplicationUser)
                 .Include(c => c.Record)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var memories = await _context.Memory
+                .Where(m => m.RecordId == collection.RecordId && m.ApplicationUserId == collection.ApplicationUserId).ToListAsync();
+
             if (collection == null)
             {
                 return NotFound();
