@@ -221,7 +221,7 @@ namespace Collective.Controllers
 
             if (collection != null)
             {
-                if (top5.Count < 6)
+                if (top5.Count < 5)
                 {
                     collection.TopFive = true;
 
