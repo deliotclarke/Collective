@@ -62,7 +62,7 @@
                         @Html.DisplayFor(modelItem => item.Year)
                     </td>
                     <td style="text-align:center">
-                        <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
+                        <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)" asp-route-ReturnUrl="searchString">View Album</a>
                     </td>
                     <td>
                         <div style="text-align:center">
@@ -73,9 +73,10 @@
                                 var userCollection = _context.Collection
                                     .Include(col => col.Record)
                                     .Where(col => col.ApplicationUserId == userId);
+
                                 if (userCollection.Any(col => col.Record.Master_Id == item.Master_Id))
                                 {
-                                    <a asp-controller="Collections" asp-action="Index" asp-route-id="@item.Master_Id">
+                                    <a asp-controller="Collections" asp-action="Details" asp-route-id="">
                                         <button class="btn btn-sm btn-danger" value="Owned">Owned</button></a>
                                     }
                                 }

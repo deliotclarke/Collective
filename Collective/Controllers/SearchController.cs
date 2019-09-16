@@ -23,6 +23,7 @@ namespace Collective.Controllers
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
         private readonly string _masterURL = @"https://api.discogs.com/masters/";
         private readonly string _keepItVinyl = @"&format=Vinyl&type=master&";
+
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly SignInManager<ApplicationUser> _signInManger;
@@ -39,7 +40,7 @@ namespace Collective.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Search
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, [FromQuery] string query)
         {
             if (String.IsNullOrEmpty(searchString))
             {
