@@ -1,0 +1,86 @@
+﻿@model Collective.Models.CollectionViewModel.CollectionDetailMemoryViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Collection</h4>
+    <hr />
+    <div class="row">
+        <dl class="col-sm-5">
+            <div class="col-sm-2">
+                <img style="height:200px;" src="@Url.Content(Model.Record.Cover_Image)" alt="cover image" />
+            </div>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Record.Artist)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Record.Artist)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Record.Title)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Record.Title)
+            </dd>
+            @*<dd class="col-sm-2">
+                Tracklist:
+            </dd>
+            <ol>
+                @foreach (var track in Model.Record.TrackList.ToList())
+                {
+                    <li>@track</li>
+                }
+            </ol>*@
+        </dl>
+        
+        <div class="col">
+            <div class="col-sm-10">
+
+                <h4>Memories</h4>
+                <hr />
+                @using (Html.BeginForm("Create", "Memories", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <form asp-controller="Memories" asp-action="Create">
+                        <h5 style="text-align:center;" class="font-weight-bold">Add Memory</h5>
+                        <input type="hidden" asp-for="Memory.RecordId" value="@Model.Record.Id" />
+                        <input type="hidden" asp-for="Memory.ApplicationUserId" value="@Model.Collection.ApplicationUserId" />
+                        <div class="form-group input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary border-secondary" id="basic-addon1">Title</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm border-secondary" asp-for="Memory.Title" placeholder="My First Record">
+                        </div>
+                        <div class="form-group input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary border-secondary" id="basic-addon1">Memory</span>
+                            </div>
+                            <textarea style="resize:none;" type="text" class="form-control form-control-sm  border-secondary" asp-for="Memory.MemoryBody" placeholder="I bought this with..."></textarea>
+                        </div>
+                        <div style="text-align:right;">
+                            <button type="submit" class="btn btn-sm btn-success">Add</button>
+                        </div>
+                    </form>
+                }
+                <hr />
+                @foreach (var memory in Model.Memories)
+                {
+                    <div class="card mb-1">
+                        <div class="card-body">
+                            <a class="btn btn-sm btn-danger float-right" asp-controller="Memories" asp-action="Delete" asp-route-id="@memory.Id"><i class="fa fa-times"></i></a>
+                            <h5 class="card-title">@memory.Title</h5>
+                            <p class="card-text">@memory.MemoryBody</p>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

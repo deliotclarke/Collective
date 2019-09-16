@@ -12,6 +12,7 @@ namespace Collective.Models
         public Record Record { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        public string Title { get; set; }
         public string MemoryBody { get; set; }
         public DateTime DateAdded { get; set; }
     }
