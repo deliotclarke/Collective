@@ -23,6 +23,7 @@ namespace Collective.Controllers
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
         private readonly string _masterURL = @"https://api.discogs.com/masters/";
         private readonly string _keepItVinyl = @"&format=Vinyl&type=master&";
+
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly SignInManager<ApplicationUser> _signInManger;
@@ -55,6 +56,10 @@ namespace Collective.Controllers
             }
             return View();
         }
+
+        //[]
+        //public async Task<IActionResult> Index(string searchString)
+        //{ }
 
         private async Task<DiscogsPageResponse> GetRequestFromDiscogs(string searchString)
         {
@@ -90,6 +95,11 @@ namespace Collective.Controllers
             if (masterUrl == null)
             {
                 return NotFound();
+            }
+
+            if (!String.IsNullOrEmpty(Request.Headers["Referer"]))
+            {
+                ViewData["ReturnLink"] = Request.Headers["Referer"].ToString();
             }
 
             var newMasterUrl = masterUrl.Replace("%2F", "/");

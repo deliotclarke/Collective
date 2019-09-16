@@ -1,18 +1,35 @@
 ﻿@model IEnumerable<Collective.Models.Collection>
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Http
+@using Collective.Data
+@using System.Linq
+@using Microsoft.EntityFrameworkCore
+
+
+
 
 @inject SignInManager<ApplicationUser> signInManager
 @inject UserManager<ApplicationUser> userManager
+@inject ApplicationDbContext _context
 
 @{
     ViewData["Title"] = "Index";
+
+    var top5Count = Model.Where(col => col.TopFive == true).ToList().Count();
 }
+
 @if (Model.Count() > 0)
 {
     @if (signInManager.IsSignedIn(User))
     {
         <h1>@userManager.GetUserAsync(User).Result.UserName's Milk Crate</h1>
+        @if (ViewBag.TopFive == false)
+        {
+            @Html.ActionLink("View My Top Five", "Index", new { topFive = true });
+        }
+        else
+        {
+            @Html.ActionLink("Back to Collection", "Index", new { topFive = false });
+        }
     }
 
 
@@ -55,10 +72,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Record.Condition)
                     </td>
-
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><br />
-                        <a>Add Memory</a><br />
+                        @if (item.TopFive == false && top5Count < 5)
+                        {
+                            <a class="text-success" asp-action="AddTopFive" asp-route-id="@item.Id">Add To Top 5</a><br />
+                        }
+                        else if (item.TopFive == true)
+                        {
+                            <a class="text-danger" asp-action="RemoveTopFive" asp-route-id="@item.Id">Remove From Top 5</a><br />
+                        }
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a><br />
                         <a asp-action="Delete" asp-route-id="@item.Id">Remove</a><br />
                     </td>

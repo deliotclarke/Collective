@@ -16,7 +16,7 @@
 
 <h1>Quick Find</h1>
 <div>
-    <form style="float:right" class="form-inline mb-5" asp-controller="Search" asp-action="Index">
+    <form style="float:right" class="form-inline mb-5" asp-controller="Search" asp-action="Index" method="get">
         <input style="width:500px;" class="form-control mr-4" type="search" name="SearchString" placeholder="search title, artist, category number, etc...">
         <button class="btn btn-outline-dark" type="submit">Search</button>
     </form>
@@ -66,25 +66,35 @@
                     </td>
                     <td>
                         <div style="text-align:center">
-                            <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-title="@item.Title">Add</a>
+
                             @if (signInManager.IsSignedIn(User))
                             {
                                 var userId = userManager.GetUserAsync(User).Result.Id;
+
                                 var userCollection = _context.Collection
                                     .Include(col => col.Record)
                                     .Where(col => col.ApplicationUserId == userId);
+
                                 if (userCollection.Any(col => col.Record.Master_Id == item.Master_Id))
                                 {
-                                    <a asp-controller="Collections" asp-action="Index" asp-route-id="@item.Master_Id">
-                                        <button class="btn btn-sm btn-danger" value="Owned">Owned</button></a>
-                                    }
+                                    var singleUserCollection = userCollection
+                                        .FirstOrDefault(col => col.Record.Master_Id == item.Master_Id);
+
+                                    <a asp-controller="Collections" asp-action="Details" asp-route-id="@singleUserCollection.Id">
+                                        <button class="btn btn-sm btn-danger" value="Owned">Owned</button>
+                                    </a>
                                 }
-                                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                    </div>
-                </td>
-            </tr>
-        }
+                                else
+                                {
+                                    <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-title="@item.Title">Add</a>
+                                }
+                            }
+                            @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     }
 </table>
