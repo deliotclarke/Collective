@@ -12,7 +12,7 @@
     <div class="row">
         <dl class="col-sm-5">
             <div class="col-sm-2">
-                <img style="height:200px;" src="@Url.Content(Model.Record.Cover_Image)" alt="cover image"/>
+                <img style="height:200px;" src="@Url.Content(Model.Record.Cover_Image)" alt="cover image" />
             </div>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Record.Artist)
@@ -26,7 +26,17 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.Record.Title)
             </dd>
+            @*<dd class="col-sm-2">
+                Tracklist:
+            </dd>
+            <ol>
+                @foreach (var track in Model.Record.TrackList.ToList())
+                {
+                    <li>@track</li>
+                }
+            </ol>*@
         </dl>
+        
         <div class="col">
             <div class="col-sm-10">
 
@@ -36,7 +46,7 @@
                 {
                     <form asp-controller="Memories" asp-action="Create">
                         <h5 style="text-align:center;" class="font-weight-bold">Add Memory</h5>
-                        <input type="hidden" asp-for="Memory.RecordId" value="@Model.Record.Id"/>
+                        <input type="hidden" asp-for="Memory.RecordId" value="@Model.Record.Id" />
                         <input type="hidden" asp-for="Memory.ApplicationUserId" value="@Model.Collection.ApplicationUserId" />
                         <div class="form-group input-group input-group-sm">
                             <div class="input-group-prepend">
@@ -56,20 +66,17 @@
                     </form>
                 }
                 <hr />
-                <div class="card mb-1">
-                    <div class="card-body">
-                        <a href="#" class="btn btn-sm btn-danger float-right"><i class="fa fa-times"></i></a>
-                        <h5 class="card-title">My First Record</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                @foreach (var memory in Model.Memories)
+                {
+                    <div class="card mb-1">
+                        <div class="card-body">
+                            <a class="btn btn-sm btn-danger float-right" asp-controller="Memories" asp-action="Delete" asp-route-id="@memory.Id"><i class="fa fa-times"></i></a>
+                            <h5 class="card-title">@memory.Title</h5>
+                            <p class="card-text">@memory.MemoryBody</p>
+                        </div>
                     </div>
-                </div>
-                <div class="card mb-1">
-                    <div class="card-body">
-                        <a href="#" class="btn btn-danger float-right"><i class="fa fa-times"></i></a>
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    </div>
-                </div>
+
+                }
             </div>
         </div>
     </div>

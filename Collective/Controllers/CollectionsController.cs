@@ -10,6 +10,7 @@ using Collective.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Collective.Models.CollectionViewModel;
 
 namespace Collective.Controllers
 {
@@ -50,6 +51,7 @@ namespace Collective.Controllers
         }
 
         // GET: Collections/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -66,12 +68,19 @@ namespace Collective.Controllers
                 .Where(m => m.RecordId == collection.RecordId && m.ApplicationUserId == collection.ApplicationUserId)
                 .ToListAsync();
 
+            var viewModel = new CollectionDetailMemoryViewModel()
+            {
+                Collection = collection,
+                Record = collection.Record,
+                Memories = memories
+            };
+
             if (collection == null)
             {
                 return NotFound();
             }
 
-            return View(collection);
+            return View(viewModel);
         }
 
         // GET: Collections/Create

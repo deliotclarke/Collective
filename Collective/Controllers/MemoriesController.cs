@@ -61,18 +61,19 @@ namespace Collective.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RecordId,ApplicationUserId,Title,MemoryBody")] Memory memory)
         {
+            var collection = _context.Collection
+                .FirstOrDefault(col => col.RecordId == memory.RecordId && col.ApplicationUserId == memory.ApplicationUserId);                
+
             memory.DateAdded = DateTime.Now;
 
             if (ModelState.IsValid)
             {
                 _context.Add(memory);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Collections", new { id = collection.Id });
             }
 
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", memory.ApplicationUserId);
-            ViewData["RecordId"] = new SelectList(_context.Record, "Id", "Artist", memory.RecordId);
-            return View(memory);
+            return NotFound();
         }
 
         // GET: Memories/Edit/5
@@ -156,9 +157,14 @@ namespace Collective.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var memory = await _context.Memory.FindAsync(id);
+
+            var collection = _context.Collection
+                .FirstOrDefault(col => col.RecordId == memory.RecordId && col.ApplicationUserId == memory.ApplicationUserId);
+
             _context.Memory.Remove(memory);
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Collections", new { id = collection.Id });
         }
 
         private bool MemoryExists(int id)
