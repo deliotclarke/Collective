@@ -97,7 +97,7 @@ namespace Collective.Controllers
                 return NotFound();
             }
 
-            if (!String.IsNullOrEmpty(Request.Headers["Referer"].ToString()))
+            if (!String.IsNullOrEmpty(Request.Headers["Referer"]))
             {
                 ViewData["ReturnLink"] = Request.Headers["Referer"].ToString();
             }
