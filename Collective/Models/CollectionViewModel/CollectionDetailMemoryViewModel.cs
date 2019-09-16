@@ -9,6 +9,7 @@ namespace Collective.Models.CollectionViewModel
     {
         public Collection Collection { get; set; }
         public Record Record { get; set; }
+        public Memory Memory { get; set; }
         public List<Memory> Memories { get; set; }
     }
 }

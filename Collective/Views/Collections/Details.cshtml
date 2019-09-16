@@ -1,4 +1,4 @@
-﻿@model Collective.Models.Collection
+﻿@model Collective.Models.CollectionViewModel.CollectionDetailMemoryViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -26,26 +26,40 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.Record.Title)
             </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.NeedList)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.NeedList)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.TopFive)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.TopFive)
-            </dd>
         </dl>
         <div class="col">
             <div class="col-sm-10">
+
                 <h4>Memories</h4>
+                <hr />
+                @using (Html.BeginForm("Create", "Memories", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <form asp-controller="Memories" asp-action="Create">
+                        <h5 style="text-align:center;" class="font-weight-bold">Add Memory</h5>
+                        <input type="hidden" asp-for="Memory.RecordId" value="@Model.Record.Id"/>
+                        <input type="hidden" asp-for="Memory.ApplicationUserId" value="@Model.Collection.ApplicationUserId" />
+                        <div class="form-group input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary border-secondary" id="basic-addon1">Title</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm border-secondary" asp-for="Memory.Title" placeholder="My First Record">
+                        </div>
+                        <div class="form-group input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary border-secondary" id="basic-addon1">Memory</span>
+                            </div>
+                            <textarea style="resize:none;" type="text" class="form-control form-control-sm  border-secondary" asp-for="Memory.MemoryBody" placeholder="I bought this with..."></textarea>
+                        </div>
+                        <div style="text-align:right;">
+                            <button type="submit" class="btn btn-sm btn-success">Add</button>
+                        </div>
+                    </form>
+                }
+                <hr />
                 <div class="card mb-1">
                     <div class="card-body">
-                        <a href="#" class="btn btn-danger float-right"><i class="fa fa-times"></i></a>
-                        <h5 class="card-title">Special title treatment</h5>
+                        <a href="#" class="btn btn-sm btn-danger float-right"><i class="fa fa-times"></i></a>
+                        <h5 class="card-title">My First Record</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                     </div>
                 </div>
@@ -61,6 +75,5 @@
     </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
