@@ -124,6 +124,23 @@ namespace Collective.Controllers
             return RedirectToAction(nameof(Profile));
         }
 
+        [Authorize]
+        [HttpPost("RemoveImage")]
+        public async Task<IActionResult> RemoveImage()
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user.UserImgPath != null)
+            {
+                user.UserImgPath = null;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Profile));
+
+        }
+
         private async Task<string> SaveFile(IFormFile file, string userId)
         {
             if (file.Length > 5242880)
