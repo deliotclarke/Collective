@@ -13,6 +13,14 @@
     @if (signInManager.IsSignedIn(User))
     {
         <h1>@userManager.GetUserAsync(User).Result.UserName's Milk Crate</h1>
+            @if (ViewBag.TopFive == false)
+            {
+                @Html.ActionLink("View My Top Five", "Index", new { topFive = true });
+            }
+            else
+            {
+                @Html.ActionLink("Back to Collection", "Index", new { topFive = false });
+            }
     }
 
 
@@ -56,6 +64,14 @@
                         @Html.DisplayFor(modelItem => item.Record.Condition)
                     </td>
                     <td>
+                        @if (item.TopFive == false)
+                        {
+                            <a class="text-success" asp-action="AddTopFive" asp-route-id="@item.Id">Add To Top 5</a><br />
+                        }
+                        else
+                        {
+                            <a class="text-danger" asp-action="RemoveTopFive" asp-route-id="@item.Id">Remove From Top 5</a><br />
+                        }
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a><br />
                         <a asp-action="Delete" asp-route-id="@item.Id">Remove</a><br />
                     </td>

@@ -33,8 +33,20 @@ namespace Collective.Controllers
 
         // GET: Collections
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool topFive)
         {
+
+            if (topFive == true)
+            {
+                var top5 = await _context.Collection
+                    .Include(col => col.Record)
+                    .Where(col => col.TopFive == true)
+                    .ToListAsync();
+
+                return View(top5);
+            }
+
+            ViewData["TopFive"] = topFive;
 
             var user = await GetCurrentUserAsync();
 
@@ -196,6 +208,38 @@ namespace Collective.Controllers
             _context.Collection.Remove(collection);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AddTopFive(int id)
+        {
+            var collection = await _context.Collection
+                .FirstOrDefaultAsync(col => col.Id == id);
+
+            if (collection != null)
+            {
+                collection.TopFive = true;
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return NotFound();
+        }
+
+        public async Task<IActionResult> RemoveTopFive(int id)
+        {
+            var collection = await _context.Collection
+                .FirstOrDefaultAsync(col => col.Id == id);
+
+            if (collection != null)
+            {
+                collection.TopFive = false;
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return NotFound();
         }
 
         private bool CollectionExists(int id)
