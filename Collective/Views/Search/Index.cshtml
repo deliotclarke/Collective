@@ -16,7 +16,7 @@
 
 <h1>Quick Find</h1>
 <div>
-    <form style="float:right" class="form-inline mb-5" asp-controller="Search" asp-action="Index">
+    <form style="float:right" class="form-inline mb-5" asp-controller="Search" asp-action="Index" method="get">
         <input style="width:500px;" class="form-control mr-4" type="search" name="SearchString" placeholder="search title, artist, category number, etc...">
         <button class="btn btn-outline-dark" type="submit">Search</button>
     </form>
@@ -62,7 +62,7 @@
                         @Html.DisplayFor(modelItem => item.Year)
                     </td>
                     <td style="text-align:center">
-                        <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)" asp-route-ReturnUrl="searchString">View Album</a>
+                        <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
                     </td>
                     <td>
                         <div style="text-align:center">

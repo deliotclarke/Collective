@@ -40,7 +40,7 @@ namespace Collective.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Search
-        public async Task<IActionResult> Index(string searchString, [FromQuery] string query)
+        public async Task<IActionResult> Index(string searchString)
         {
             if (String.IsNullOrEmpty(searchString))
             {
@@ -56,6 +56,10 @@ namespace Collective.Controllers
             }
             return View();
         }
+
+        //[]
+        //public async Task<IActionResult> Index(string searchString)
+        //{ }
 
         private async Task<DiscogsPageResponse> GetRequestFromDiscogs(string searchString)
         {
@@ -91,6 +95,11 @@ namespace Collective.Controllers
             if (masterUrl == null)
             {
                 return NotFound();
+            }
+
+            if (!String.IsNullOrEmpty(Request.Headers["Referer"].ToString()))
+            {
+                ViewData["ReturnLink"] = Request.Headers["Referer"].ToString();
             }
 
             var newMasterUrl = masterUrl.Replace("%2F", "/");
