@@ -215,12 +215,21 @@ namespace Collective.Controllers
             var collection = await _context.Collection
                 .FirstOrDefaultAsync(col => col.Id == id);
 
+            var top5 = await _context.Collection
+                .Where(col => col.TopFive == true)
+                .ToListAsync();
+
             if (collection != null)
             {
-                collection.TopFive = true;
+                if (top5.Count < 6)
+                {
+                    collection.TopFive = true;
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return RedirectToAction("Index", new { topfive = true });
             }
 
             return NotFound();
