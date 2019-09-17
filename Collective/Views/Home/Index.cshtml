@@ -1,34 +1,80 @@
-﻿@{
+﻿@model IEnumerable<Collective.Models.NewsItem>
+@using Microsoft.AspNetCore.Identity
+@using System.Linq
+@using Microsoft.EntityFrameworkCore
+
+
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-@*<div style="position:relative;text-align:center;width:100%;" class="img-fluid">
-    <img style="width:100%;height:100%;opacity:.1;border-radius:5px;" src="https://images.unsplash.com/photo-1489838720009-3286c4293fda?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" />
-    <div style="height:5rem;position:absolute;top:15%;left:50%;transform:translate(-50%,-50%);width:65%;" class="rounded"><h1 style="font-size:3rem;font-family:Exo;color:#001201;" class="mb-0">Welcome back!</h1></div>
-</div>
-<hr class="my-4">*@
+@inject SignInManager<ApplicationUser> signInManager
 
 
-@*<div class="container-fluid">
-        <div id="carouselExampleInterval" class="carousel slide carousel-fade" data-ride="carousel">
-            <div class="carousel-inner">
-                <div style="width:100%;height:600px" class="carousel-item active" data-interval="3000">
-                    <img src="https://images.unsplash.com/photo-1460058418905-d61a1b4a55fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60" class="d-block w-100" alt="...">
+@if (signInManager.IsSignedIn(User) && Model.Count() > 0)
+{
+    <h1>Welcome Back!</h1>
+    <hr />
+
+    <div class="home-body mt-5">
+        @foreach (var item in Model)
+        {
+            if (item.MemoryBody != null)
+            {
+                <div class="card mb-2">
+                    <h5 class="card-header bg-info text-white"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Memory to @item.Record.Title<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p style="margin:0;" class="card-text">@item.MemoryBody</p>
+                    </div>
                 </div>
-                <div style="width:100%;height:600px" class="carousel-item" data-interval="3000">
-                    <img src="https://images.unsplash.com/photo-1544734268-37a548d914e1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" class="d-block w-100" alt="...">
-                </div>
-                <div style="width:100%;height:600px" class="carousel-item" data-interval="3000">
-                    <img src="https://images.unsplash.com/photo-1528590005476-4f5a6f2bdd9e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>*@
+            }
+            else
+            {
+                @if (item.TopFive == true)
+                {
+                    <div class="card mb-2">
+                        <h5 class="card-header bg-primary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Top Five<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <div class="card-body">
+                            <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
+                            <h5 class="card-title">@item.Record.Title</h5>
+                            <small class="text-muted"> Condition: @item.Record.Condition</small>
+                        </div>
+                    </div>
+                }
+                else if (item.NeedList == true)
+                {
+                    <div class="card mb-2">
+                        <h5 class="card-header bg-primary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Need List<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <div class="card-body">
+                            <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
+                            <h5 class="card-title">@item.Record.Title</h5>
+                            <small class="text-muted"> Condition: @item.Record.Condition</small>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card mb-2">
+                        <h5 class="card-header bg-primary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Milk Crate<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <div class="card-body">
+                            <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
+                            <h5 class="card-title">@item.Record.Title</h5>
+                            <small class="text-muted"> Condition: @item.Record.Condition</small>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+}
+else
+{
+    <h1>Welcome!</h1>
+    <h4>To view homepage login or register and make some friends!</h4>
+    <a>Login</a>
+    <br />
+    <a>Register</a>
+}
+
