@@ -59,10 +59,10 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-primary border-secondary" id="basic-addon1">Memory</span>
                             </div>
-                            <textarea style="resize:none;" type="text" class="form-control form-control-sm  border-secondary" asp-for="Memory.MemoryBody" placeholder="I bought this with..."></textarea>
+                            <textarea style="resize:none;" type="text" class="form-control form-control-sm border-secondary" asp-for="Memory.MemoryBody" placeholder="I bought this with..."></textarea>
                         </div>
                         <div style="text-align:right;">
-                            <button type="submit" class="btn btn-sm btn-success">Add</button>
+                            <button type="submit" class="btn btn-sm btn-success" style="background-color:#D99441;border:none;">Add</button>
                         </div>
                     </form>
                 }
@@ -71,7 +71,7 @@
                 {
                     <div class="card mb-1">
                         <div class="card-body">
-                            <a class="btn btn-sm btn-danger float-right" asp-controller="Memories" asp-action="Delete" asp-route-id="@memory.Id"><i class="fa fa-times"></i></a>
+                            <a class="btn btn-sm float-right" style="background-color:#8C6E64;color:white;" asp-controller="Memories" asp-action="Delete" asp-route-id="@memory.Id"><i class="fa fa-times"></i></a>
                             <h5 class="card-title">@memory.Title</h5>
                             <p class="card-text">@memory.MemoryBody</p>
                         </div>

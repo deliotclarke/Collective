@@ -9,6 +9,7 @@ namespace Collective.Models.ProfileViewModel
     {
         public ApplicationUser User { get; set; }
         public List<Collection> Collection { get; set; }
+        public Record Record { get; set; }
         public List<Memory> Memories { get; set; }
     }
 }

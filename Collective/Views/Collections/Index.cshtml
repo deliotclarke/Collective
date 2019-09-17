@@ -4,16 +4,12 @@
 @using System.Linq
 @using Microsoft.EntityFrameworkCore
 
-
-
-
 @inject SignInManager<ApplicationUser> signInManager
 @inject UserManager<ApplicationUser> userManager
 @inject ApplicationDbContext _context
 
 @{
     ViewData["Title"] = "Index";
-
     var top5Count = Model.Where(col => col.TopFive == true).ToList().Count();
 }
 

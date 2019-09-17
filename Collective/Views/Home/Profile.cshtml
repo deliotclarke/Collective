@@ -1,4 +1,13 @@
 ﻿@model Collective.Models.ProfileViewModel.ProfileViewModel
+@using Collective.Data
+@using Microsoft.AspNetCore.Identity
+@using System.Linq
+@using Collective.Models
+@using Microsoft.EntityFrameworkCore
+@using Collective.Controllers
+
+@inject ApplicationDbContext _context
+@inject UserManager<ApplicationUser> userManager
 
 @{
     ViewData["Title"] = "Profile";
@@ -12,21 +21,22 @@
         <div class="col">
             @if (Model.User.UserImgPath != null)
             {
-                <div class="mb-5" style="width:200px;height:200px;position:relative;overflow:hidden;border-radius:50%;">
+                <div style="width:200px;height:200px;position:relative;overflow:hidden;border-radius:50%;margin:auto;">
                     <img style="display:inline;margin:0,auto;margin-left:-25%;height:100%;width:auto;" src="@Url.Content(Model.User.UserImgPath)" alt="User Profile Image" />
                 </div>
+
                 @using (Html.BeginForm("RemoveImage", "Home", FormMethod.Post))
                 {
-                    <div class="col-sm-5">
+                    <div style="text-align:center;" class="col-sm-12 mt-1 mb-5">
                         <form asp-controller="Home" asp-action="RemoveImage">
-                            <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
+                            <input type="submit" value="Remove" class="btn btn-danger btn-sm" />
                         </form>
                     </div>
                 }
             }
             else
             {
-                <div style="text-align:center" class="col-sm-4 mb-5 small">
+                <div style="text-align:center" class="col-sm-8 mb-5 small">
                     <i class="far fa-user fa-10x"></i>
                     <h5>No Profile Image</h5>
                     @using (Html.BeginForm("ImageUpload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -35,48 +45,32 @@
                         <form asp-controller="Home" asp-action="ImageUpload">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <input type="submit" value="Upload" class="btn btn-success btn-sm" />
+                                    <input type="submit" value="Upload" class="btn btn-primary btn-sm" />
                                 </div>
                                 <div class="custom-file">
                                     <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png" class="custom-file-input text-dark" />
                                     <label style="text-align:left" class="custom-file-label"></label>
                                 </div>
                             </div>
-                            
+
                         </form>
                     }
                 </div>
             }
-            @*<dd class="col-sm-10">
-                    @foreach (var artist in Model.Collection.TopFive)
-                    {
-                        @Html.DisplayFor(Artist => artist.Name)
-                    }
-                </dd>*@
-            @*@if (Model.Notes != null)
-                {
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Notes)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Notes)
-                    </dd>
-                }*@
-            @*add buttons for adding to different lists/removing*@
             <dl>
                 @if (Model.User.Bio != null)
                 {
                     <dt class="col-sm-5">
                         @Html.DisplayNameFor(model => model.User.Bio)
                     </dt>
-                    <dd class="col-sm-5 mb-0">
+                    <dd class="col-sm-5 mb-2">
                         @Html.DisplayFor(model => model.User.Bio)
                     </dd>
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         @using (Html.BeginForm("RemoveBio", "Home", FormMethod.Post))
                         {
                             <form asp-controller="Home" asp-action="RemoveBio">
-                                <input style="float:right;" type="submit" value="Rewrite Bio" class="btn btn-danger btn-sm" />
+                                <input type="submit" value="Remove" class="btn btn-danger btn-sm" />
                             </form>
                         }
                     </div>
@@ -84,7 +78,7 @@
                 }
                 else
                 {
-                    <div class="col-sm-5">
+                    <div class="col-sm-8">
                         @using (Html.BeginForm("AddBio", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             @Html.AntiForgeryToken()
@@ -92,7 +86,7 @@
                                 <div class="form-group">
                                     <label asp-for="User.Bio" style="font-weight:700" class="control-label">Add An About Me!</label>
                                     <textarea asp-for="User.Bio" name="BioString" id="BioString" style="resize:none;height:100px;" class="form-control" placeholder="How'd you get here??"></textarea>
-                                    <input type="submit" value="Add Bio" class="btn btn-success btn-sm mt-1" />
+                                    <input type="submit" value="Add Bio" class="btn btn-primary btn-sm mt-1" />
                                 </div>
                             </form>
                         }
@@ -100,8 +94,47 @@
                 }
             </dl>
             <div class="col-sm-10 mt-5">
-                <a asp-controller="Collections" asp-action="Index">My Milk Crate (@Model.Collection.Count())</a>
+                <a style="font-size:2rem;" asp-controller="Collections" asp-action="Index">Milk Crate (@Model.Collection.Count())</a>
             </div>
+
+        </div>
+        <div class="col">
+            <table class="table">
+                @{
+                    var top5 = @Model.Collection
+                        .Where(col => col.TopFive == true)
+                        .ToList();
+                    var top5Count = top5.Count();
+                }
+                <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    <tr />
+                </thead>
+                <h2>Top Five</h2>
+                <tbody>
+                    @foreach (var item in top5)
+                    {
+                        <tr>
+                            <td>
+                                <div style="text-align:center;width:80%;">
+                                    <img style="height:150px" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" /><br />
+                                    @Html.DisplayFor(modelItem => item.Record.Title)<br />
+                                </div>
+                            </td>
+                            <td>
+                                <div role="group" class="btn-group-vertical btn-group-sm">
+                                    <a class="btn btn-danger" asp-controller="Collections" asp-action="RemoveTopFive" asp-route-id="@item.Id">Remove</a>
+                                    <a class="btn btn-primary" asp-controller="Collections" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

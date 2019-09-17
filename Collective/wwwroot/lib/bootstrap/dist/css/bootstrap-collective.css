@@ -124,9 +124,10 @@ sup {
   top: -.5em; }
 
 a {
-  color: #F2D272;
-  text-decoration: none;
-  background-color: transparent; }
+    color: #D99441;
+    text-decoration: none;
+    background-color: transparent;
+}
   a:hover {
     color: #ecbc2c;
     text-decoration: underline; }
