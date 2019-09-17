@@ -75,6 +75,11 @@ namespace Collective.Controllers
         {
             var user = await GetCurrentUserAsync();
 
+            if (file == null)
+            {
+                return RedirectToAction(nameof(Profile));
+            }
+
             if (ModelState.IsValid)
             {
                 user.UserImgPath = await SaveFile(file, user.Id);
@@ -89,7 +94,7 @@ namespace Collective.Controllers
                 return RedirectToAction(nameof(Profile));
             }
 
-            return NotFound();
+            return RedirectToAction(nameof(Profile));
         }
 
         [Authorize]
