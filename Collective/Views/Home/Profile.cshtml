@@ -1,4 +1,13 @@
 ﻿@model Collective.Models.ProfileViewModel.ProfileViewModel
+@using Collective.Data
+@using Microsoft.AspNetCore.Identity
+@using System.Linq
+@using Collective.Models
+@using Microsoft.EntityFrameworkCore
+@using Collective.Controllers
+
+@inject ApplicationDbContext _context
+@inject UserManager<ApplicationUser> userManager
 
 @{
     ViewData["Title"] = "Profile";
@@ -35,14 +44,14 @@
                         <form asp-controller="Home" asp-action="ImageUpload">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <input type="submit" value="Upload" class="btn btn-success btn-sm" />
+                                    <input type="submit" value="Upload" class="btn btn-primary btn-sm" />
                                 </div>
                                 <div class="custom-file">
                                     <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png" class="custom-file-input text-dark" />
                                     <label style="text-align:left" class="custom-file-label"></label>
                                 </div>
                             </div>
-                            
+
                         </form>
                     }
                 </div>
@@ -92,16 +101,80 @@
                                 <div class="form-group">
                                     <label asp-for="User.Bio" style="font-weight:700" class="control-label">Add An About Me!</label>
                                     <textarea asp-for="User.Bio" name="BioString" id="BioString" style="resize:none;height:100px;" class="form-control" placeholder="How'd you get here??"></textarea>
-                                    <input type="submit" value="Add Bio" class="btn btn-success btn-sm mt-1" />
+                                    <input type="submit" value="Add Bio" class="btn btn-primary btn-sm mt-1" />
                                 </div>
                             </form>
                         }
                     </div>
                 }
             </dl>
-            <div class="col-sm-10 mt-5">
-                <a asp-controller="Collections" asp-action="Index">My Milk Crate (@Model.Collection.Count())</a>
-            </div>
+            
+        </div>
+        <div class="col">
+            <table class="table">
+                <div class="col-sm-10 mt-5">
+                    <a asp-controller="Collections" asp-action="Index">My Milk Crate (@Model.Collection.Count())</a>
+                </div>
+                @{ 
+                    var top5 = @Model.Collection
+                        .Include(col => col.Record)
+                        .Where(col => col.TopFive == true)
+                        .ToList();
+                }
+                <thead>
+                    <tr>
+                        <th>
+                            Master Release Id
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Collection.)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Collection.Year)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Collection.Condition)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Record.Master_Id)
+                            </td>
+                            <td>
+                                <img style="height:150px" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Record.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Record.Year)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Record.Condition)
+                            </td>
+                            <td>
+                                @if (item.TopFive == false && top5Count < 5)
+                                {
+                                    <a class="text-success" asp-action="AddTopFive" asp-route-id="@item.Id">Add To Top 5</a><br />
+                                }
+                                else if (item.TopFive == true)
+                                {
+                                    <a class="text-danger" asp-action="RemoveTopFive" asp-route-id="@item.Id">Remove From Top 5</a><br />
+                                }
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a><br />
+                                <a asp-action="Delete" asp-route-id="@item.Id">Remove</a><br />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
