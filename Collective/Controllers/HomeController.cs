@@ -40,8 +40,20 @@ namespace Collective.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            var user = await GetCurrentUserAsync();
+
+            var collections = _context.Collection
+                .Include(col => col.Record)
+                .Include(col => col.ApplicationUser)
+                .Where(col => col.ApplicationUserId != user.Id).ToList();
+
+            var memories = _context.Memory
+                .Include(mem => mem.Record)
+                .Include(mem => mem.ApplicationUser)
+                .Where(mem => mem.ApplicationUserId != user.Id).ToList();
+
             return View();
         }
 
