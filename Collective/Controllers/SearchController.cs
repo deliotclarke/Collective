@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Authorization;
 
-// This controller will be used for getting records from discogs, not from records inside the Collective database
 namespace Collective.Controllers
 {
     public class SearchController : Controller
@@ -56,10 +55,6 @@ namespace Collective.Controllers
             }
             return View();
         }
-
-        //[]
-        //public async Task<IActionResult> Index(string searchString)
-        //{ }
 
         private async Task<DiscogsPageResponse> GetRequestFromDiscogs(string searchString)
         {

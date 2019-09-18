@@ -52,7 +52,9 @@ namespace Collective.Controllers
 
             var userCollection = _context.Collection
                 .Include(co => co.Record)
-                .Where(co => co.ApplicationUserId == user.Id).ToList();
+                .Where(co => co.ApplicationUserId == user.Id)
+                .OrderByDescending(co => co.DateAdded)
+                .ToList();
 
             if(userCollection != null)
             { 

@@ -53,14 +53,18 @@ namespace Collective.Controllers
                 .Include(col => col.Record)
                 .Include(col => col.ApplicationUser)
                 .Where(col => col.ApplicationUserId != user.Id)
-                .OrderBy(col => col.DateAdded)
                 .ToList();
 
             var memories = _context.Memory
                 .Include(mem => mem.Record)
                 .Include(mem => mem.ApplicationUser)
                 .Where(mem => mem.ApplicationUserId != user.Id)
-                .OrderBy(mem => mem.DateAdded)
+                .ToList();
+
+            var friends = _context.UserFriend
+                .Include(uf => uf.ApplicationUser)
+                .Include(uf => uf.Friend)
+                .Where(uf => uf.Pending == false)
                 .ToList();
 
             var newsItems1 = collections.Select(col => new NewsItem()
@@ -85,8 +89,20 @@ namespace Collective.Controllers
                 DateAdded = mem.DateAdded
             }).ToList();
 
-            var bigList = newsItems1.Concat(newsItems2)
-                .OrderBy(item => item.DateAdded)
+            var newsItems3 = friends.Select(uf => new NewsItem()
+            {
+                ApplicationUserId = uf.ApplicationUserId,
+                ApplicationUser = uf.ApplicationUser,
+                FriendId = uf.FriendId,
+                Friend = uf.Friend,
+                DateAdded = uf.DateAdded
+            }).ToList();
+
+            var bigList = newsItems1
+                .Concat(newsItems2)
+                .Concat(newsItems3)
+                .OrderByDescending(item => item.DateAdded)
+                .Take(10)
                 .ToList();
 
             return View(bigList);
@@ -149,6 +165,54 @@ namespace Collective.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> RequestFriend(string id)
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            var pendingRequest = new UserFriend()
+            {
+                ApplicationUserId = currentUser.Id,
+                FriendId = id,
+                Pending = true,
+                DateAdded = DateTime.Now
+            };
+
+            var routeId = id;
+
+            _context.UserFriend.Add(pendingRequest);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("PublicProfile", new { id = routeId });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ApproveFriendRequest(int id)
+        {
+            var pendingRequest = await _context.UserFriend
+                .Include(uf => uf.ApplicationUser)
+                .FirstOrDefaultAsync(uf => uf.Id == id);
+
+            var navigationId = pendingRequest.ApplicationUser.Id;
+
+            pendingRequest.Pending = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("PublicProfile", new { id = navigationId });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> DenyFriendRequest(int id)
+        {
+            var pendingRequest = await _context.UserFriend
+                .FirstOrDefaultAsync(uf => uf.Id == id);
+
+            _context.UserFriend.Remove(pendingRequest);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize]

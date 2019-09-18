@@ -1,22 +1,48 @@
 ﻿@model IEnumerable<Collective.Models.NewsItem>
 @using Microsoft.AspNetCore.Identity
 @using System.Linq
+@using Collective.Data
 @using Microsoft.EntityFrameworkCore
 
-
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
+@inject ApplicationDbContext  _context
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@inject SignInManager<ApplicationUser> signInManager
-
 
 @if (signInManager.IsSignedIn(User) && Model.Count() > 0)
 {
+    var currentUserId = userManager.GetUserAsync(User).Result.Id;
+
+    var pendingRequest = _context.UserFriend
+        .Include(uf => uf.ApplicationUser)
+        .Where(uf => uf.FriendId == currentUserId && uf.Pending == true)
+        .ToList();
+
     <h1>Welcome Back!</h1>
     <lead>See what you missed below, or start searching!</lead>
     <hr />
+    @if (pendingRequest.Count() > 0)
+    {
+        foreach (var item in pendingRequest)
+        {
+            <div class="card mb-2 w-25 text-center">
+                <h5 class="card-header bg-info text-white text-sm-left">
+                    <span class="font-weight-bold">@item.ApplicationUser.UserName</span> wants to be friends!
+
+                </h5>
+                <div class="card-body">
+                    <h5 class="card-title">Approve Request?</h5>
+                    <a role="button" asp-controller="Home" asp-action="ApproveFriendRequest" asp-route-id="@item.Id" class="btn btn-sm btn-success text-white mr-3">Approve!</a>
+                    <a role="button" asp-controller="Home" asp-action="DenyFriendRequest" asp-route-id="@item.Id" class="btn btn-sm btn-danger text-white">No Thanks!</a>
+                </div>
+            </div>
+        }
+        <hr />
+    }
 
     <div class=" mt-5">
         @foreach (var item in Model)
@@ -24,11 +50,14 @@
             if (item.MemoryBody != null)
             {
                 <div class="card mb-2">
-                    <h5 class="card-header bg-info text-white text-sm-left"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Memory to @item.Record.Title
-                    <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                    <h5 class="card-header bg-info text-white text-sm-left">
+                        <span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Memory to @item.Record.Title
+                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a>
+                    </h5>
                     <div class="card-body">
                         <h5 class="card-title">@item.Title</h5>
                         <p style="margin:0;" class="card-text">@item.MemoryBody</p>
+                        <small class="text-muted">@item.DateAdded</small>
                     </div>
                 </div>
             }
@@ -37,36 +66,57 @@
                 @if (item.TopFive == true)
                 {
                     <div class="card mb-2">
-                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Top Five
-                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <h5 class="card-header bg-primary text-secondary">
+                            <span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Top Five
+                            <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a>
+                        </h5>
                         <div class="card-body">
                             <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
                             <h5 class="card-title">@item.Record.Title</h5>
-                            <small class="text-muted"> Condition: @item.Record.Condition</small>
+                            <p> Condition: @item.Record.Condition</p>
+                            <small class="text-muted">@item.DateAdded</small>
                         </div>
                     </div>
                 }
                 else if (item.NeedList == true)
                 {
                     <div class="card mb-2">
-                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Need List
-                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <h5 class="card-header bg-primary text-secondary">
+                            <span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Need List
+                            <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a>
+                        </h5>
                         <div class="card-body">
                             <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
                             <h5 class="card-title">@item.Record.Title</h5>
-                            <small class="text-muted"> Condition: @item.Record.Condition</small>
+                            <p> Condition: @item.Record.Condition</p>
+                            <small class="text-muted">@item.DateAdded</small>
+                        </div>
+                    </div>
+                }
+                else if (item.FriendId != null)
+                {
+                    <div class="card mb-2">
+                        <h5 class="card-header bg-info text-white">
+                            Friend Request Approved!
+                        </h5>
+                        <div class="card-body">
+                            <h5 class="card-title"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> and <span class="font-weight-bold">@item.Friend.UserName</span> are now Friends!</h5>
+                            <small class="text-muted">@item.DateAdded</small>
                         </div>
                     </div>
                 }
                 else
                 {
                     <div class="card mb-2">
-                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Milk Crate
-                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <h5 class="card-header bg-primary text-secondary">
+                            <span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Milk Crate
+                            <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a>
+                        </h5>
                         <div class="card-body">
                             <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
                             <h5 class="card-title">@item.Record.Title</h5>
-                            <small class="text-muted"> Condition: @item.Record.Condition</small>
+                            <p> Condition: @item.Record.Condition</p>
+                            <small class="text-muted">@item.DateAdded</small>
                         </div>
                     </div>
                 }
@@ -76,12 +126,12 @@
 }
 else
 {
-<div class="jumbotron" style="color:white;background-image:url(https://images.unsplash.com/photo-1460058418905-d61a1b4a55fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80);background-position:center;background-size:cover;background-repeat:no-repeat;">
-    <h1 class="display-4">Welcome to <span class="text-primary">Collective</span>.</h1>
-    <p class="lead">A place for Audiophiles and Audio-filers.</p>
-    <div class="my-5"></div>
-    <p class="pl-1 rounded" style="background-color:rgba(59, 59, 59, .5)">Collective is for <span class="text-primary">Vinyl Collectors</span> to keep track of their growing collection, their favorite memories and maybe make some friends. Adding new records to your <span class="text-primary">Milk Crate</span> is a breeze with <span class="text-primary">Easy Search</span>. Don't worry, whenever you search, we'll keep track of what you own so you don't buy duplicates (unless of course it's in better shape, no one would fault you for that).</p>
-    <a class="btn btn-primary btn-lg" role="button" asp-area="Identity" asp-page="/Account/Register">Register Here!</a>
-</div>
+    <div class="jumbotron" style="color:white;background-image:url(https://images.unsplash.com/photo-1460058418905-d61a1b4a55fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80);background-position:center;background-size:cover;background-repeat:no-repeat;">
+        <h1 class="display-4">Welcome to <span class="text-primary">Collective</span>.</h1>
+        <p class="lead">A place for Audiophiles and Audio-filers.</p>
+        <div class="my-5"></div>
+        <p class="pl-1 rounded" style="background-color:rgba(59, 59, 59, .5)">Collective is for <span class="text-primary">Vinyl Collectors</span> to keep track of their growing collection, their favorite memories and maybe make some friends. Adding new records to your <span class="text-primary">Milk Crate</span> is a breeze with <span class="text-primary">Easy Search</span>. Don't worry, whenever you search, we'll keep track of what you own so you don't buy duplicates (unless of course it's in better shape, no one would fault you for that).</p>
+        <a class="btn btn-primary btn-lg" role="button" asp-area="Identity" asp-page="/Account/Register">Register Here!</a>
+    </div>
 }
 
