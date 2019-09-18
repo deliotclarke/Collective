@@ -151,6 +151,11 @@ namespace Collective.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> RequestFriend(string id)
+        {
+
+        }
+
         [Authorize]
         [HttpPost("ImageUpload")]
         [ValidateAntiForgeryToken]
