@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Collective.Models.Record>
+﻿@model Collective.Models.SearchViewModel.SearchIndexViewModel
 @using Collective.Data
 @using Microsoft.AspNetCore.Identity
 @using System.Linq
@@ -26,15 +26,15 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Catno)
+                @Html.DisplayNameFor(model => model.Record.Catno)
             </th>
             <th>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Record.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model.Record.Year)
             </th>
             <th></th>
         </tr>
@@ -42,7 +42,7 @@
     @if (Model != null)
     {
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Records)
             {
                 <tr>
                     <td>
@@ -99,5 +99,11 @@
                 </tr>
             }
         </tbody>
+        @if (Model.Pagination != null)
+        {
+            @if (Model.Pagination.Urls.Next != null)
+            {
+            }
+        }
     }
 </table>

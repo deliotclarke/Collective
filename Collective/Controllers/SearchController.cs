@@ -14,6 +14,7 @@ using static Collective.Models.DiscogsSearch;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Authorization;
+using Collective.Models.SearchViewModel;
 
 namespace Collective.Controllers
 {
@@ -50,8 +51,16 @@ namespace Collective.Controllers
 
             if (discogsResponse != null)
             {
-                var recordList = discogsResponse.Results;
-                return View(recordList);
+                var recordList = discogsResponse.Results.ToList();
+
+                var viewModel = new SearchIndexViewModel()
+                {
+                    Records = recordList,
+                    Pagination = discogsResponse.Pagination
+                };
+
+
+                return View(viewModel);
             }
             return View();
         }
