@@ -85,7 +85,11 @@
                                 }
                                 else
                                 {
-                                    <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-title="@item.Title">Add</a>
+                                    <a asp-action="Add" asp-route-id="@item.Master_Id" asp-route-title="@item.Title">
+                                        <button class="btn btn-sm btn-primary">
+                                            <img style="height:32px;" src="~/images/MilkCrate.PNG" />
+                                        </button>
+                                    </a>
                                 }
                             }
                             @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
