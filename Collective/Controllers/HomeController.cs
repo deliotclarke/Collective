@@ -40,9 +40,56 @@ namespace Collective.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return View();
+            }
+
+            var collections = _context.Collection
+                .Include(col => col.Record)
+                .Include(col => col.ApplicationUser)
+                .Where(col => col.ApplicationUserId != user.Id)
+                .OrderBy(col => col.DateAdded)
+                .ToList();
+
+            var memories = _context.Memory
+                .Include(mem => mem.Record)
+                .Include(mem => mem.ApplicationUser)
+                .Where(mem => mem.ApplicationUserId != user.Id)
+                .OrderBy(mem => mem.DateAdded)
+                .ToList();
+
+            var newsItems1 = collections.Select(col => new NewsItem()
+            {
+                ApplicationUserId = col.ApplicationUserId,
+                ApplicationUser = col.ApplicationUser,
+                RecordId = col.RecordId,
+                Record = col.Record,
+                TopFive = col.TopFive,
+                NeedList = col.NeedList,
+                DateAdded = col.DateAdded
+            }).ToList();
+
+            var newsItems2 = memories.Select(mem => new NewsItem()
+            {
+                ApplicationUserId = mem.ApplicationUserId,
+                ApplicationUser = mem.ApplicationUser,
+                RecordId = mem.RecordId,
+                Record = mem.Record,
+                Title = mem.Title,
+                MemoryBody = mem.MemoryBody,
+                DateAdded = mem.DateAdded
+            }).ToList();
+
+            var bigList = newsItems1.Concat(newsItems2)
+                .OrderBy(item => item.DateAdded)
+                .ToList();
+
+            return View(bigList);
         }
 
         [Authorize]
