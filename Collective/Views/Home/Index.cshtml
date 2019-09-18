@@ -24,7 +24,8 @@
             if (item.MemoryBody != null)
             {
                 <div class="card mb-2">
-                    <h5 class="card-header bg-info text-white text-sm-left"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Memory to @item.Record.Title<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                    <h5 class="card-header bg-info text-white text-sm-left"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Memory to @item.Record.Title
+                    <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
                     <div class="card-body">
                         <h5 class="card-title">@item.Title</h5>
                         <p style="margin:0;" class="card-text">@item.MemoryBody</p>
@@ -36,7 +37,8 @@
                 @if (item.TopFive == true)
                 {
                     <div class="card mb-2">
-                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Top Five<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Top Five
+                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
                         <div class="card-body">
                             <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
                             <h5 class="card-title">@item.Record.Title</h5>
@@ -47,7 +49,8 @@
                 else if (item.NeedList == true)
                 {
                     <div class="card mb-2">
-                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Need List<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Need List
+                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
                         <div class="card-body">
                             <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
                             <h5 class="card-title">@item.Record.Title</h5>
@@ -58,7 +61,8 @@
                 else
                 {
                     <div class="card mb-2">
-                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Milk Crate<a style="float:right;" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
+                        <h5 class="card-header bg-primary text-secondary"><span class="font-weight-bold">@item.ApplicationUser.UserName</span> added a Record to their Milk Crate
+                        <a style="float:right;" role="button" asp-controller="Home" asp-action="PublicProfile" asp-route-id="@item.ApplicationUser.Id" class="btn btn-sm btn-secondary text-white">View User Profile</a></h5>
                         <div class="card-body">
                             <img style="height:100px;margin:0;" src="@Url.Content(item.Record.Cover_Image)" alt="album cover" />
                             <h5 class="card-title">@item.Record.Title</h5>

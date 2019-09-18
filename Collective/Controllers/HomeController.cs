@@ -116,6 +116,42 @@ namespace Collective.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> PublicProfile(string id)
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            if(id == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (currentUser.Id == id)
+            {
+                return RedirectToAction(nameof(Profile));
+            }
+
+            var user = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            var collection = await _context.Collection
+                .Include(col => col.Record)
+                .Where(col => col.ApplicationUserId == user.Id).ToListAsync();
+
+            var memories = await _context.Memory
+                .Include(mem => mem.Record)
+                .Where(mem => mem.ApplicationUserId == user.Id).ToListAsync();
+
+            var viewModel = new ProfileViewModel()
+            {
+                User = user,
+                Collection = collection,
+                Memories = memories
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize]
         [HttpPost("ImageUpload")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImageUpload(IFormFile file)
