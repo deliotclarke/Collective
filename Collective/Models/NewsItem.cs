@@ -15,6 +15,8 @@ namespace Collective.Models
         public string MemoryBody { get; set; }
         public bool TopFive { get; set; }
         public bool NeedList { get; set; }
+        public string FriendId { get; set; }
+        public ApplicationUser Friend { get; set; }
         public DateTime DateAdded { get; set; }
     }
 }

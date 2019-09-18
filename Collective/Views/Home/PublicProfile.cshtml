@@ -12,6 +12,13 @@
 
 @{
     ViewData["Title"] = "PublicProfile";
+
+    var currentUserId = userManager.GetUserAsync(User).Result.Id;
+
+    var friendCheck = _context.UserFriend
+        .FirstOrDefault(uf =>
+        (uf.ApplicationUserId == currentUserId && uf.FriendId == Model.User.Id) ||
+        (uf.ApplicationUserId == Model.User.Id && uf.FriendId == currentUserId));
 }
 
 <h2>@Model.User.UserName</h2>
@@ -21,9 +28,12 @@
 <div>
     <div class="row">
         <div class="col">
-<div>
-    <a role="button" asp-controller="Home" asp-action="RequestFriend" asp-route-id="@Model.User.Id" class="btn btn-sm btn-success text-white">Request Friend</a>
-</div>
+            @if (friendCheck == null)
+            {
+                <div>
+                    <a role="button" asp-controller="Home" asp-action="RequestFriend" asp-route-id="@Model.User.Id" class="btn btn-sm btn-success text-white">Request Friend</a>
+                </div>
+            }
             @if (Model.User.UserImgPath != null)
             {
                 <div style="width:200px;height:200px;position:relative;overflow:hidden;border-radius:50%;margin:auto;">
