@@ -39,7 +39,7 @@
                     <dt class="col-sm-5 mt-5">
                         @Html.DisplayNameFor(model => model.User.Bio)
                     </dt>
-                    <dd class="col-sm-5 mb-2">
+                    <dd class="col-sm-8 mb-2">
                         @Html.DisplayFor(model => model.User.Bio)
                     </dd>
                 }
@@ -90,9 +90,13 @@
                     }
                     else
                     {
-                        <div>
-                            <p>@Model.User.UserName is still working on picking their top five.</p>
-                        </div>
+                        <tr>
+                            <td>
+                                <div>
+                                    <p>@Model.User.UserName is still working on picking their top five.</p>
+                                </div>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
