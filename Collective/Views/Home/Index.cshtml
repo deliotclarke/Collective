@@ -15,6 +15,7 @@
 @if (signInManager.IsSignedIn(User) && Model.Count() > 0)
 {
     <h1>Welcome Back!</h1>
+    <lead>See what you missed below, or start searching!</lead>
     <hr />
 
     <div class=" mt-5">
@@ -71,10 +72,12 @@
 }
 else
 {
-    <h1>Welcome!</h1>
-    <h4>To view homepage login or register and make some friends!</h4>
-    <a>Login</a>
-    <br />
-    <a>Register</a>
+<div class="jumbotron" style="color:white;background-image:url(https://images.unsplash.com/photo-1460058418905-d61a1b4a55fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80);background-position:center;background-size:cover;background-repeat:no-repeat;">
+    <h1 class="display-4">Welcome to <span class="text-primary">Collective</span>.</h1>
+    <p class="lead">A place for Audiophiles and Audio-filers.</p>
+    <div class="my-5"></div>
+    <p class="pl-1 rounded" style="background-color:rgba(59, 59, 59, .5)">Collective is for <span class="text-primary">Vinyl Collectors</span> to keep track of their growing collection, their favorite memories and maybe make some friends. Adding new records to your <span class="text-primary">Milk Crate</span> is a breeze with <span class="text-primary">Easy Search</span>. Don't worry, whenever you search, we'll keep track of what you own so you don't buy duplicates (unless of course it's in better shape, no one would fault you for that).</p>
+    <a class="btn btn-primary btn-lg" role="button" asp-area="Identity" asp-page="/Account/Register">Register Here!</a>
+</div>
 }
 
