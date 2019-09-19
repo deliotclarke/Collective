@@ -49,14 +49,12 @@
                 @Html.DropDownListFor(model => model.Condition, new SelectList(
                   new List<Object>{
                        new { value = "Unselected", text ="Please Select..." },
-                       new { value = "M" , text = "Mint"  },
-                       new { value = "NM" , text = "Near Mint" },
-                       new { value = "VG+" , text = "Very Good Plus" },
-                       new { value = "VG", text = "Very Good" },
-                       new { value = "G+", text ="Good Plus" },
-                       new { value = "G", text = "Good" },
-                       new { value = "F", text = "Fair" },
-                       new { value = "P", text = "Poor" }
+                       new { value = "Mint" , text = "Mint"  },
+                       new { value = "Near Mint" , text = "Near Mint" },
+                       new { value = "Very Good" , text = "Very Good" },
+                       new { value = "Good", text = "Good" },
+                       new { value = "Fair", text = "Fair" },
+                       new { value = "Poor", text = "Poor" }
                     },
                   "value",
                   "text",
