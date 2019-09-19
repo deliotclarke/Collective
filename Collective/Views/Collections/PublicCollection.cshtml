@@ -22,7 +22,6 @@
     @if (signInManager.IsSignedIn(User))
     {
         var username = Model.FirstOrDefault().ApplicationUser.UserName;
-
         <h1>@username's Milk Crate</h1>
         @if (ViewBag.TopFive == false)
         {
@@ -85,6 +84,7 @@
 else
 {
     <div class="text-center">
-        <h3>Unfortunately, this user's Milk Crate is empty!</h3>
+        <h3>Unfortunately, this user hasn't picked any top Records yet.</h3>
+        <a asp-controller="Search" asp-action="Index">Let's get out of here!</a>
     </div>
 }
