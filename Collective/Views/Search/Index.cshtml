@@ -99,11 +99,25 @@
                 </tr>
             }
         </tbody>
-        @if (Model.Pagination != null)
-        {
-            @if (Model.Pagination.Urls.Next != null)
-            {
-            }
-        }
     }
 </table>
+@if (Model != null)
+{
+    @if (Model.Pagination != null)
+    {
+        <div class="row w-100">
+            @if (Model.Pagination.Urls.Prev != null)
+            {
+                <div class="col">
+                    <a class="btn btn-sm btn-primary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Prev)">Previous</a>
+                </div>
+            }
+            @if (Model.Pagination.Urls.Next != null)
+            {
+                <div class="col align-content-end">
+                    <a class="float-right btn btn-sm btn-primary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Next)">Next</a>
+                </div>
+            }
+        </div>
+    }
+}
