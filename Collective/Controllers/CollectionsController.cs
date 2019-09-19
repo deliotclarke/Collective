@@ -63,6 +63,44 @@ namespace Collective.Controllers
             return View();
         }
 
+        [Authorize]
+        public async Task<IActionResult> PublicCollection(string id, bool topFive)
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (currentUser.Id == id)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (topFive == true)
+            {
+                var top5 = await _context.Collection
+                    .Include(col => col.Record)
+                    .Include(col => col.ApplicationUser)
+                    .Where(col => col.TopFive == true && col.ApplicationUserId == id)
+                    .ToListAsync();
+
+                return View(top5);
+            }
+
+            ViewData["TopFive"] = topFive;
+
+            var user = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            var collection = await _context.Collection
+                .Include(col => col.Record)
+                .Where(col => col.ApplicationUserId == id).ToListAsync();
+
+            return View(collection);
+        }
+
         // GET: Collections/Details/5
         [Authorize]
         public async Task<IActionResult> Details(int? id)
