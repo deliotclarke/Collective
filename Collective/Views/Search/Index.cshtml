@@ -109,13 +109,13 @@
             @if (Model.Pagination.Urls.Prev != null)
             {
                 <div class="col">
-                    <a class="btn btn-sm btn-primary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Prev)">Previous</a>
+                    <a class="btn btn-sm btn-secondary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Prev)">Prev</a>
                 </div>
             }
             @if (Model.Pagination.Urls.Next != null)
             {
                 <div class="col align-content-end">
-                    <a class="float-right btn btn-sm btn-primary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Next)">Next</a>
+                    <a class="float-right btn btn-sm btn-secondary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Next)">Next</a>
                 </div>
             }
         </div>
