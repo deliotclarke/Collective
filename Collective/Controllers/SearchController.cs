@@ -229,7 +229,7 @@ namespace Collective.Controllers
                         Artist = responseMasterContent.Artists.First().Name,
                         Title = responseMasterContent.Title,
                         Year = responseMasterContent.Year,
-                        TrackList = responseMasterContent.Tracklist,
+                        TrackList = responseMasterContent.Tracklist.ToList(),
                         Barcode = singleRegularRecord.Barcode.ToList(),
                         Master_Url = singleRegularRecord.Master_Url
                     };
