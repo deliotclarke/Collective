@@ -14,6 +14,7 @@ using static Collective.Models.DiscogsSearch;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Authorization;
+using Collective.Models.SearchViewModel;
 
 namespace Collective.Controllers
 {
@@ -21,7 +22,7 @@ namespace Collective.Controllers
     {
         private readonly string _recordURL = @"https://api.discogs.com/database/search?q=";
         private readonly string _masterURL = @"https://api.discogs.com/masters/";
-        private readonly string _keepItVinyl = @"&format=Vinyl&type=master&";
+        private readonly string _keepItVinyl = @"&format=Vinyl&type=master&per_page=10&";
 
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
@@ -50,10 +51,30 @@ namespace Collective.Controllers
 
             if (discogsResponse != null)
             {
-                var recordList = discogsResponse.Results;
-                return View(recordList);
+                var recordList = discogsResponse.Results.ToList();
+
+                var viewModel = new SearchIndexViewModel()
+                {
+                    Records = recordList,
+                    Pagination = discogsResponse.Pagination
+                };
+
+
+                return View(viewModel);
             }
             return View();
+        }
+
+        public async Task<IActionResult> Index2(string PageUrl)
+        {
+            var viewModel = await UsePagination(PageUrl);
+
+            if (viewModel != null)
+            {
+                return View("Index", viewModel);
+            }
+
+            return RedirectToAction("Index");
         }
 
         private async Task<DiscogsPageResponse> GetRequestFromDiscogs(string searchString)
@@ -79,6 +100,42 @@ namespace Collective.Controllers
                     return responseContent;
                 }
             }
+            return null;
+        }
+
+        public async Task<SearchIndexViewModel> UsePagination(string PageUrl)
+        {
+            if (String.IsNullOrEmpty(PageUrl))
+            {
+                return null;
+            }
+
+            var client = new HttpClient();
+
+            client.DefaultRequestHeaders.Add("user-agent", "Collective");
+
+            var response = await client.GetAsync(PageUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsAsync<DiscogsPageResponse>();
+
+                if (responseContent != null)
+                {
+                    var recordList = responseContent.Results.ToList();
+
+                    var viewModel = new SearchIndexViewModel()
+                    {
+                        Records = recordList,
+                        Pagination = responseContent.Pagination
+                    };
+
+                    return viewModel;
+                }
+
+                return null;
+            }
+
             return null;
         }
 
@@ -149,13 +206,13 @@ namespace Collective.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var responseRegularContent = await GetRequestFromDiscogs(title);
-                var responseMasterContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();   
+                var responseMasterContent = await response.Content.ReadAsAsync<DiscogsMasterSearch>();
 
                 var currentUser = await GetCurrentUserAsync();
 
                 var collectionCheck = _context.Collection
-                    .Where(col => (col.ApplicationUserId == currentUser.Id) 
-                    &&(col.Record.Master_Id == id))
+                    .Where(col => (col.ApplicationUserId == currentUser.Id)
+                    && (col.Record.Master_Id == id))
                     .FirstOrDefault();
 
                 if (collectionCheck == null)

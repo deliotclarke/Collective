@@ -35,12 +35,13 @@ namespace Collective.Controllers
         [Authorize]
         public async Task<IActionResult> Index(bool topFive)
         {
+            var currentUser = await GetCurrentUserAsync();
 
             if (topFive == true)
             {
                 var top5 = await _context.Collection
                     .Include(col => col.Record)
-                    .Where(col => col.TopFive == true)
+                    .Where(col => col.TopFive == true && col.ApplicationUserId == currentUser.Id)
                     .ToListAsync();
 
                 return View(top5);
@@ -48,11 +49,9 @@ namespace Collective.Controllers
 
             ViewData["TopFive"] = topFive;
 
-            var user = await GetCurrentUserAsync();
-
             var userCollection = _context.Collection
                 .Include(co => co.Record)
-                .Where(co => co.ApplicationUserId == user.Id)
+                .Where(co => co.ApplicationUserId == currentUser.Id)
                 .OrderByDescending(co => co.DateAdded)
                 .ToList();
 
@@ -61,7 +60,7 @@ namespace Collective.Controllers
                 return View(userCollection);
             }
 
-            return NotFound();
+            return View();
         }
 
         // GET: Collections/Details/5
@@ -214,11 +213,13 @@ namespace Collective.Controllers
 
         public async Task<IActionResult> AddTopFive(int id)
         {
+            var currentUser = await GetCurrentUserAsync();
+            
             var collection = await _context.Collection
                 .FirstOrDefaultAsync(col => col.Id == id);
 
             var top5 = await _context.Collection
-                .Where(col => col.TopFive == true)
+                .Where(col => col.TopFive == true && col.ApplicationUserId == currentUser.Id)
                 .ToListAsync();
 
             if (collection != null)

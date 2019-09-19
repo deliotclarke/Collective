@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Collective.Models.Record>
+﻿@model Collective.Models.SearchViewModel.SearchIndexViewModel
 @using Collective.Data
 @using Microsoft.AspNetCore.Identity
 @using System.Linq
@@ -26,15 +26,15 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Catno)
+                @Html.DisplayNameFor(model => model.Record.Catno)
             </th>
             <th>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Record.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model.Record.Year)
             </th>
             <th></th>
         </tr>
@@ -42,7 +42,7 @@
     @if (Model != null)
     {
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Records)
             {
                 <tr>
                     <td>
@@ -101,3 +101,23 @@
         </tbody>
     }
 </table>
+@if (Model != null)
+{
+    @if (Model.Pagination != null)
+    {
+        <div class="row w-100">
+            @if (Model.Pagination.Urls.Prev != null)
+            {
+                <div class="col">
+                    <a class="btn btn-sm btn-primary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Prev)">Previous</a>
+                </div>
+            }
+            @if (Model.Pagination.Urls.Next != null)
+            {
+                <div class="col align-content-end">
+                    <a class="float-right btn btn-sm btn-primary" role="button" asp-action="Index2" asp-route-PageUrl="@Url.Content(Model.Pagination.Urls.Next)">Next</a>
+                </div>
+            }
+        </div>
+    }
+}
