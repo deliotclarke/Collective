@@ -4,42 +4,21 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this from your Collection?</h3>
 <div>
-    <h4>Collection</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplicationUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUser.Id)
-        </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Record)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Record.Artist)
+            @Model.Record.Title
         </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateAdded)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NeedList)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NeedList)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TopFive)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TopFive)
         </dd>
     </dl>
     

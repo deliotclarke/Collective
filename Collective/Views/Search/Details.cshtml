@@ -4,10 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.Artists.FirstOrDefault().Name - @Model.Title</h1>
 
 <div>
-    <h4>DiscogsMasterSearch</h4>
     <hr />
     <div class="row">
         <div class="col-sm-5">
@@ -46,18 +45,21 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Title)
             </dd>
-            <dt class="col-sm-2">
+            <dt class="col-sm-5">
                 @Html.DisplayNameFor(model => model.Num_For_Sale)
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Num_For_Sale)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Main_Release_Url)
+                @Html.DisplayNameFor(model => model.Styles)
             </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Main_Release_Url)
-            </dd>
+            @foreach (var item in Model.Styles)
+            {
+                <dd class="col-sm-10">
+                    @item
+                </dd>
+            }
             @if (Model.Notes != null)
             {
                 <dt class="col-sm-2">

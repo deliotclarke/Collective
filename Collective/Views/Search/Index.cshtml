@@ -61,7 +61,7 @@
                         @Html.DisplayFor(modelItem => item.Year)
                     </td>
                     <td style="text-align:center">
-                        <a asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
+                        <a class="btn btn-primary" role="button" asp-controller="Search" asp-action="Details" asp-route-masterUrl="@Url.Content(item.Master_Url)" asp-route-imageUrl="@Url.Content(item.Cover_Image)">View Album</a>
                     </td>
                     <td>
                         <div style="text-align:center">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,9 @@ namespace Collective.Models
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         [NotMapped]
+        [Display(Name = "Style(s)")]
         public List<string> Styles { get; set; }
+        [Display(Name = "Number for Sale on Discogs")]
         public int Num_For_Sale { get; set; }
         public string Title { get; set; }
         public string Main_Release_Url { get; set; }
