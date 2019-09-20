@@ -13,6 +13,7 @@ namespace Collective.Models
         [Display(Name = "Id")]
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Master ID")]
         public int Master_Id { get; set; }
         [Required]
         [Display(Name = "Category Number")]
